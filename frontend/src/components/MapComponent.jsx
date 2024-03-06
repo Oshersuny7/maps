@@ -8,26 +8,24 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { useGeographic } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON.js";
-import { Modal, Box, Typography, Button, Popover } from "@mui/material";
+import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
+import PopoverComponent from "./PopOverComponent";
+import DrawComponent from "./DrawComponent";
+import SearchComponent from "./SearchComponent";
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [vectorLayer, setVectorLayer] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
-  const [selectedPlaceCoordinates, setSelectedPlaceCoordinates] = useState(null);
+  const [drawing, setDrawing] = useState(false);
   const anchorElRef = useRef(null);
 
   useEffect(() => {
     useGeographic();
     const mapInstance = new Map({
       target: "map",
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
+      layers: [new TileLayer({ source: new OSM() })],
       view: new View({
         center: [31, 35],
         zoom: 7,
@@ -47,7 +45,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (!vectorLayer) return;
-    fetch("/coordinates.json")
+    fetch('/coordinates.json')
       .then((response) => response.json())
       .then((data) => {
         return new GeoJSON().readFeatures(data);
@@ -56,35 +54,32 @@ const MapComponent = () => {
         vectorLayer.getSource().addFeatures(features);
       })
       .catch((error) => {
-        console.error("Error loading GeoJSON:", error);
+        console.error('Error loading GeoJSON:', error);
       });
   }, [vectorLayer]);
 
   useEffect(() => {
     if (!vectorLayer) return;
-    fetch("/sibiruni.json")
+    fetch('/sibiruni.json')
       .then((response) => response.json())
       .then((data) => {
         return new GeoJSON().readFeatures(data);
       })
       .then((features) => {
         vectorLayer.getSource().addFeatures(features);
-      
       })
       .catch((error) => {
-        console.error("Error loading GeoJSON:", error);
+        console.error('Error loading GeoJSON:', error);
       });
   }, [vectorLayer, map]);
 
   useEffect(() => {
     if (!map) return;
-
     map.on("click", function (event) {
       map.forEachFeatureAtPixel(event.pixel, function (feature) {
         const properties = feature.getProperties();
         setSelectedPlaceProperties(properties);
         setOpenModal(true);
-
         const coordinate = feature.getGeometry().getCoordinates();
         anchorElRef.current.style.left = event.pixel[0] + "px";
         anchorElRef.current.style.top = event.pixel[1] + "px";
@@ -101,78 +96,43 @@ const MapComponent = () => {
     setOpenModal(false);
     anchorElRef.current.style.display = "none";
   };
-  
-  const handleSearch = async () => {
-    if (!map) return;
-    try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
-      const data = await response.json();
-
-      if (data.length > 0) {
-        const { lat, lon } = data[0];
-        const center = fromLonLat([parseFloat(lon), parseFloat(lat)]);
-        setSelectedPlaceCoordinates(center);
-        map.getView().animate({ center, zoom: 10, duration: 1000 });
-      } else {
-        alert('Location not found');
-      }
-    } catch (error) {
-      console.error('Error searching location:', error);
-    }
-  };
 
   return (
     <div>
-      <Box id="map" style={{ width: "100%", height: "500px" }}> </Box>
-      <div>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Enter city or country"
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-    
-      <div ref={anchorElRef} style={{ display: "none", position: "absolute" }}>
-        <Popover
-          id="popover"
-          open={openModal}
-          onClose={handleCloseModal}
-          anchorEl={anchorElRef.current}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
+      <Box id="map" style={{ width: "100%", height: "500px" }}></Box>
+      <PopoverComponent
+        open={openModal}
+        handleClose={handleCloseModal}
+        selectedPlaceProperties={selectedPlaceProperties}
+        anchorElRef={anchorElRef}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "5px",
+        }}
+      >
+        <SearchComponent />
+        <Typography>Geometry type:</Typography>
+        <Select
+          defaultValue="None"
+          onChange={(event) => setDrawing(event.target.value)}
         >
-          <Box>
-            <Typography variant="h6" component="h2">
-              Location Properties
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              <div>
-                Location:{" "}
-                {selectedPlaceProperties && selectedPlaceProperties.location}
-              </div>
-              <div>
-                Coordinates:{" "}
-                {selectedPlaceProperties && selectedPlaceProperties.coordinates}
-              </div>
-              <div>
-                Degrees:{" "}
-                {selectedPlaceProperties && selectedPlaceProperties.degrees}
-              </div>
-            </Typography>
-
-            <Button onClick={handleCloseModal} sx={{ mt: 2 }}>
-              Close
-            </Button>
-          </Box>
-        </Popover>
-      </div>
+          <MenuItem value="Point">Point</MenuItem>
+          <MenuItem value="LineString">LineString</MenuItem>
+          <MenuItem value="Polygon">Polygon</MenuItem>
+          <MenuItem value="Circle">Circle</MenuItem>
+          <MenuItem value="None">None</MenuItem>
+        </Select>
+        
+        {/* to be continued  */}
+        <Button variant="contained" color="error" onClick={() => {}}> Delete all Draws</Button>
+      </Box>
+      {drawing && map && <DrawComponent map={map} geometryType={drawing} />}
     </div>
   );
 };
 
 export default MapComponent;
-
