@@ -76,14 +76,16 @@ const MapComponent = () => {
   useEffect(() => {
     if (!map) return;
     map.on("click", function (event) {
-      map.forEachFeatureAtPixel(event.pixel, function (feature) {
+      map.forEachFeatureAtPixel(event.pixel, (feature) => {
         const properties = feature.getProperties();
         setSelectedPlaceProperties(properties);
         setOpenModal(true);
-        const coordinate = feature.getGeometry().getCoordinates();
+        // const coordinate = feature.getGeometry().getCoordinates();
         anchorElRef.current.style.left = event.pixel[0] + "px";
         anchorElRef.current.style.top = event.pixel[1] + "px";
         anchorElRef.current.style.display = "block";
+      }, {
+        layerFilter: (layer) => layer.getProperties().name && layer.getProperties().name !== 'drawLayer'
       });
     });
 
@@ -96,6 +98,12 @@ const MapComponent = () => {
     setOpenModal(false);
     anchorElRef.current.style.display = "none";
   };
+
+  const handleDelete = () => {
+    const layerToRemove = map.getLayers().getArray().find(layer => layer.getProperties().name === 'drawLayer')
+
+    if (layerToRemove) map.removeLayer(layerToRemove)
+  }
 
   return (
     <div>
@@ -128,7 +136,7 @@ const MapComponent = () => {
         </Select>
         
         {/* to be continued  */}
-        <Button variant="contained" color="error" onClick={() => {}}> Delete all Draws</Button>
+        <Button variant="contained" color="error" onClick={handleDelete}> Delete all Draws</Button>
       </Box>
       {drawing && map && <DrawComponent map={map} geometryType={drawing} />}
     </div>
