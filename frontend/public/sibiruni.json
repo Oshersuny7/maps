@@ -1,0 +1,20 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+            "location":"Sibir",
+            "coordinates":"92.7701965158642, 56.00376353210146",
+            "degrees":"-25 C"
+        },
+        "geometry": {
+          "coordinates": [
+            92.7701965158642,
+            56.00376353210146
+          ],
+          "type": "Point"
+        }
+      }
+    ]
+  }
