@@ -1,12 +1,13 @@
+import { Box, Typography } from '@mui/material'
 import './App.css'
 import MapComponent from './components/MapComponent'
 function App() {
 
   return (
-    <div className="App">
-    <h1>Maps Application</h1>
+    <Box className="App">
+    <Typography>Maps Application</Typography>
     <MapComponent />
-  </div>
+  </Box>
   )
 }
 

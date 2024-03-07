@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Draw from 'ol/interaction/Draw.js';
-import { unByKey } from 'ol/Observable.js';
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
+import React, { useEffect, useRef, useState } from "react";
+import Draw from "ol/interaction/Draw.js";
+import { unByKey } from "ol/Observable.js";
+import { drawLayer } from "./utils/DrawLayers";
 
 const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
   const drawInteraction = useRef(null);
@@ -10,12 +9,7 @@ const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
 
   useEffect(() => {
     if (!map || !geometryType) return;
-
-    const drawLayer = new VectorLayer({
-      name: 'drawLayer',
-      source: new VectorSource()
-    })
-
+    drawLayer;
     drawInteraction.current = new Draw({
       source: drawLayer.getSource(),
       type: geometryType,
@@ -23,12 +17,12 @@ const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
 
     map.addInteraction(drawInteraction.current);
 
-    const drawStartKey = drawInteraction.current.on('drawstart', () => {
+    const drawStartKey = drawInteraction.current.on("drawstart", () => {
       setDrawing(true);
       changeCursor();
     });
 
-    const drawEndKey = drawInteraction.current.on('drawend', () => {
+    const drawEndKey = drawInteraction.current.on("drawend", () => {
       setDrawing(false);
       changeCursor();
       map.addLayer(drawLayer);
@@ -47,12 +41,11 @@ const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
     if (drawing) {
       mapElement.style.cursor = "crosshair";
     } else {
-      mapElement.style.cursor = '';
+      mapElement.style.cursor = "";
     }
   };
 
-
-  return null;
+  return <></>;
 };
 
 export default DrawComponent;

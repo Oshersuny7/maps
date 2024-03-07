@@ -12,6 +12,7 @@ import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import PopoverComponent from "./PopOverComponent";
 import DrawComponent from "./DrawComponent";
 import SearchComponent from "./SearchComponent";
+import { COORDINATES_JSON_PATH, SIBIRUNI_JSON_PATH } from "./utils/FilePaths";
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
@@ -19,12 +20,13 @@ const MapComponent = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
   const [drawing, setDrawing] = useState(false);
+  const containerRef = useRef(null); 
   const anchorElRef = useRef(null);
 
   useEffect(() => {
     useGeographic();
     const mapInstance = new Map({
-      target: "map",
+      target: containerRef.current, 
       layers: [new TileLayer({ source: new OSM() })],
       view: new View({
         center: [31, 35],
@@ -45,7 +47,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (!vectorLayer) return;
-    fetch('/coordinates.json')
+    fetch(COORDINATES_JSON_PATH)
       .then((response) => response.json())
       .then((data) => {
         return new GeoJSON().readFeatures(data);
@@ -60,7 +62,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (!vectorLayer) return;
-    fetch('/sibiruni.json')
+    fetch(SIBIRUNI_JSON_PATH)
       .then((response) => response.json())
       .then((data) => {
         return new GeoJSON().readFeatures(data);
@@ -80,7 +82,6 @@ const MapComponent = () => {
         const properties = feature.getProperties();
         setSelectedPlaceProperties(properties);
         setOpenModal(true);
-        // const coordinate = feature.getGeometry().getCoordinates();
         anchorElRef.current.style.left = event.pixel[0] + "px";
         anchorElRef.current.style.top = event.pixel[1] + "px";
         anchorElRef.current.style.display = "block";
@@ -106,8 +107,8 @@ const MapComponent = () => {
   }
 
   return (
-    <div>
-      <Box id="map" style={{ width: "100%", height: "500px" }}></Box>
+    <Box>
+      <Box ref={containerRef} id="map" style={{ width: "100%", height: "500px" }}></Box>
       <PopoverComponent
         open={openModal}
         handleClose={handleCloseModal}
@@ -135,11 +136,10 @@ const MapComponent = () => {
           <MenuItem value="None">None</MenuItem>
         </Select>
         
-        {/* to be continued  */}
         <Button variant="contained" color="error" onClick={handleDelete}> Delete all Draws</Button>
       </Box>
       {drawing && map && <DrawComponent map={map} geometryType={drawing} />}
-    </div>
+    </Box>
   );
 };
 

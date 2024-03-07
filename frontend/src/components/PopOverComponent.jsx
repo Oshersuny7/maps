@@ -3,7 +3,7 @@ import { Box, Typography, Button, Popover } from '@mui/material';
 
 const PopoverComponent = ({ open, handleClose, selectedPlaceProperties, anchorElRef }) => {
   return (
-    <div ref={anchorElRef} style={{ display: 'none', position: 'absolute' }}>
+    <Box ref={anchorElRef} style={{ display: 'none', position: 'absolute' }}>
       <Popover
         id="popover"
         open={open}
@@ -18,16 +18,16 @@ const PopoverComponent = ({ open, handleClose, selectedPlaceProperties, anchorEl
           <Typography variant="h6" component="h2">
             Location Properties
           </Typography>
-          <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-            <div>
+          <Typography variant="body1" component="Box" sx={{ mt: 2 }}>
+            <Box>
               Location: {selectedPlaceProperties && selectedPlaceProperties.location}
-            </div>
-            <div>
+            </Box>
+            <Box>
               Coordinates: {selectedPlaceProperties && selectedPlaceProperties.coordinates}
-            </div>
-            <div>
+            </Box>
+            <Box>
               Degrees: {selectedPlaceProperties && selectedPlaceProperties.degrees}
-            </div>
+            </Box>
           </Typography>
 
           <Button onClick={handleClose} sx={{ mt: 2 }}>
@@ -35,7 +35,7 @@ const PopoverComponent = ({ open, handleClose, selectedPlaceProperties, anchorEl
           </Button>
         </Box>
       </Popover>
-    </div>
+    </Box>
   );
 };
 
