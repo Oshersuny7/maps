@@ -118,23 +118,25 @@ const MapComponent = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-around",
           alignItems: "center",
           marginTop: "5px",
         }}
       >
         <SearchComponent />
+        <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
         <Typography>Geometry type:</Typography>
         <Select
           defaultValue="None"
           onChange={(event) => setDrawing(event.target.value)}
-        >
+          >
           <MenuItem value="Point">Point</MenuItem>
           <MenuItem value="LineString">LineString</MenuItem>
           <MenuItem value="Polygon">Polygon</MenuItem>
           <MenuItem value="Circle">Circle</MenuItem>
           <MenuItem value="None">None</MenuItem>
         </Select>
+          </Box>
         
         <Button variant="contained" color="error" onClick={handleDelete}> Delete all Draws</Button>
       </Box>

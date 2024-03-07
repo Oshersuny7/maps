@@ -1,9 +1,15 @@
-import React from "react";
-import { Alert, Box, Button, Input, Snackbar } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Input, Snackbar } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import Alert from '@mui/material/Alert';
 
-const SearchComponent = () => {
+const SearchComponent = ({ map, fromLonLat }) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false); 
+  const [selectedPlaceCoordinates, setSelectedPlaceCoordinates] = useState(null); 
+  const [searchQuery, setSearchQuery] = useState("");
+
   const handleSearch = () => {
+    console.log("Search clicked");
     if (!map) return;
 
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`)
@@ -23,8 +29,6 @@ const SearchComponent = () => {
       });
   };
 
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -34,7 +38,11 @@ const SearchComponent = () => {
 
   return (
     <Box>
-      <Input placeholder="Insert country/city"></Input>
+      <Input 
+        placeholder="Insert country/city"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <Button onClick={handleSearch}><SearchIcon /> Search</Button> 
       <Snackbar
         open={snackbarOpen}
