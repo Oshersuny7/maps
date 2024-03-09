@@ -13,6 +13,7 @@ import PopoverComponent from "./PopOverComponent";
 import DrawComponent from "./DrawComponent";
 import SearchComponent from "./SearchComponent";
 import { COORDINATES_JSON_PATH, SIBIRUNI_JSON_PATH } from "./utils/FilePaths";
+import DrawLayer from "./utils/LayersName";
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
@@ -20,17 +21,19 @@ const MapComponent = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
   const [drawing, setDrawing] = useState(false);
-  const containerRef = useRef(null); 
+  const [drawingInProgress, setDrawingInProgress] = useState(false);
+  const containerRef = useRef(null);
   const anchorElRef = useRef(null);
+  const geometryTypes = ["Point", "LineString", "Polygon", "Circle", "None"];
 
   useEffect(() => {
     useGeographic();
     const mapInstance = new Map({
-      target: containerRef.current, 
+      target: containerRef.current,
       layers: [new TileLayer({ source: new OSM() })],
       view: new View({
         center: [31, 35],
-        zoom: 7,
+        zoom: 2,
       }),
     });
     setMap(mapInstance);
@@ -77,23 +80,36 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (!map) return;
-    map.on("click", function (event) {
-      map.forEachFeatureAtPixel(event.pixel, (feature) => {
-        const properties = feature.getProperties();
-        setSelectedPlaceProperties(properties);
-        setOpenModal(true);
-        anchorElRef.current.style.left = event.pixel[0] + "px";
-        anchorElRef.current.style.top = event.pixel[1] + "px";
-        anchorElRef.current.style.display = "block";
-      }, {
-        layerFilter: (layer) => layer.getProperties().name && layer.getProperties().name !== 'drawLayer'
-      });
-    });
-
-    return () => {
-      map.un("click");
+    const handlePopOver = (event) => {
+      if (!drawingInProgress && !drawing) {
+        const feature = map.forEachFeatureAtPixel(
+          event.pixel,
+          (feature) => feature
+        );
+        if (feature) {
+          const properties = feature.getProperties();
+          anchorElRef.current.style.left = event.pixel[0] + "px";
+          anchorElRef.current.style.top = event.pixel[1] + "px";
+          anchorElRef.current.style.display = "block";
+          setSelectedPlaceProperties(properties);
+          setOpenModal(true);
+        }
+      }
     };
-  }, [map]);
+
+    map.on("click", handlePopOver);
+    return () => {
+      map.un("click", handlePopOver);
+    };
+  }, [map, drawingInProgress]);
+
+  useEffect(() => {
+    if (drawing) {
+      setDrawingInProgress(true);
+    } else {
+      setDrawingInProgress(false);
+    }
+  }, [drawing]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -101,14 +117,20 @@ const MapComponent = () => {
   };
 
   const handleDelete = () => {
-    const layerToRemove = map.getLayers().getArray().find(layer => layer.getProperties().name === 'drawLayer')
-
-    if (layerToRemove) map.removeLayer(layerToRemove)
-  }
+    const layerToRemove = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.getProperties().name === DrawLayer);
+    if (layerToRemove) map.removeLayer(layerToRemove);
+  };
 
   return (
     <Box>
-      <Box ref={containerRef} id="map" style={{ width: "100%", height: "500px" }}></Box>
+      <Box
+        ref={containerRef}
+        id="map"
+        style={{ width: "100%", height: "500px" }}
+      ></Box>
       <PopoverComponent
         open={openModal}
         handleClose={handleCloseModal}
@@ -123,22 +145,31 @@ const MapComponent = () => {
           marginTop: "5px",
         }}
       >
-        <SearchComponent />
-        <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-        <Typography>Geometry type:</Typography>
-        <Select
-          defaultValue="None"
-          onChange={(event) => setDrawing(event.target.value)}
+        {/* <SearchComponent /> */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography>Geometry type:</Typography>
+          <Select
+            defaultValue="None"
+            onChange={(event) => setDrawing(event.target.value)}
           >
-          <MenuItem value="Point">Point</MenuItem>
-          <MenuItem value="LineString">LineString</MenuItem>
-          <MenuItem value="Polygon">Polygon</MenuItem>
-          <MenuItem value="Circle">Circle</MenuItem>
-          <MenuItem value="None">None</MenuItem>
-        </Select>
-          </Box>
-        
-        <Button variant="contained" color="error" onClick={handleDelete}> Delete all Draws</Button>
+            {geometryTypes.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+
+        <Button variant="contained" color="error" onClick={handleDelete}>
+          {" "}
+          Delete all Draws
+        </Button>
       </Box>
       {drawing && map && <DrawComponent map={map} geometryType={drawing} />}
     </Box>

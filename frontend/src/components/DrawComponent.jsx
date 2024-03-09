@@ -1,20 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draw from "ol/interaction/Draw.js";
 import { unByKey } from "ol/Observable.js";
-import { drawLayer } from "./utils/DrawLayers";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import DrawLayer from "./utils/LayersName"
 
-const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
+const DrawComponent = ({ map, geometryType }) => {
   const drawInteraction = useRef(null);
   const [drawing, setDrawing] = useState(false);
 
   useEffect(() => {
-    if (!map || !geometryType) return;
-    drawLayer;
+    if (!map || !geometryType || geometryType === "None") return;
+       const drawLayer = new VectorLayer({
+        name: DrawLayer,
+        source: new VectorSource()
+      })
+
     drawInteraction.current = new Draw({
       source: drawLayer.getSource(),
       type: geometryType,
     });
-
+    map.addLayer(drawLayer);
     map.addInteraction(drawInteraction.current);
 
     const drawStartKey = drawInteraction.current.on("drawstart", () => {
@@ -25,7 +31,6 @@ const DrawComponent = ({ map, geometryType, onDeleteGeometries }) => {
     const drawEndKey = drawInteraction.current.on("drawend", () => {
       setDrawing(false);
       changeCursor();
-      map.addLayer(drawLayer);
     });
 
     return () => {
