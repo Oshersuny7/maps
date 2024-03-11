@@ -11,8 +11,17 @@ const DrawComponent = ({ map, geometryType, setCounterFeatures }) => {
   const [drawing, setDrawing] = useState(false);
 
   useEffect(() => {
-    if (!map || !geometryType || geometryType === "None") return;
-
+    if (!map || !geometryType) return;
+  
+    if (geometryType === "None") {
+      if (drawInteractionRef.current) {
+        map.removeInteraction(drawInteractionRef.current);
+        drawInteractionRef.current = null;
+      }
+      changeCursor("default");
+      return;
+    }
+  
     if (!drawLayerRef.current) {
       drawLayerRef.current = new VectorLayer({
         name: DrawLayer,
@@ -20,42 +29,39 @@ const DrawComponent = ({ map, geometryType, setCounterFeatures }) => {
       });
       map.addLayer(drawLayerRef.current);
     }
-
+  
     if (drawInteractionRef.current) {
       map.removeInteraction(drawInteractionRef.current);
     }
-
+  
     drawInteractionRef.current = new Draw({
       source: drawLayerRef.current.getSource(),
       type: geometryType,
     });
-
+  
     map.addInteraction(drawInteractionRef.current);
-
+  
     const drawStartKey = drawInteractionRef.current.on("drawstart", () => {
       setDrawing(true);
       changeCursor();
     });
-
+  
     const drawEndKey = drawInteractionRef.current.on("drawend", () => {
       setDrawing(false);
       changeCursor();
       setCounterFeatures((prevCounter) => prevCounter + 1);
     });
-
+  
     return () => {
       unByKey(drawStartKey);
       unByKey(drawEndKey);
     };
   }, [map, geometryType, setCounterFeatures]);
+  
 
-  const changeCursor = () => {
+  const changeCursor = (cursorType = "crosshair") => {
     const mapElement = map.getTargetElement();
-    if (drawing) {
-      mapElement.style.cursor = "crosshair";
-    } else {
-      mapElement.style.cursor = "";
-    }
+    mapElement.style.cursor = cursorType;
   };
 
   return <></>;
