@@ -3,43 +3,51 @@ import Draw from "ol/interaction/Draw.js";
 import { unByKey } from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import DrawLayer from "./utils/LayersName"
+import DrawLayer from "./utils/LayersName";
 
-const DrawComponent = ({ map, geometryType }) => {
-  const drawInteraction = useRef(null);
+const DrawComponent = ({ map, geometryType, setCounterFeatures }) => {
+  const drawLayerRef = useRef(null);
+  const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
 
   useEffect(() => {
     if (!map || !geometryType || geometryType === "None") return;
-       const drawLayer = new VectorLayer({
-        name: DrawLayer,
-        source: new VectorSource()
-      })
 
-    drawInteraction.current = new Draw({
-      source: drawLayer.getSource(),
+    if (!drawLayerRef.current) {
+      drawLayerRef.current = new VectorLayer({
+        name: DrawLayer,
+        source: new VectorSource(),
+      });
+      map.addLayer(drawLayerRef.current);
+    }
+
+    if (drawInteractionRef.current) {
+      map.removeInteraction(drawInteractionRef.current);
+    }
+
+    drawInteractionRef.current = new Draw({
+      source: drawLayerRef.current.getSource(),
       type: geometryType,
     });
-    map.addLayer(drawLayer);
-    map.addInteraction(drawInteraction.current);
 
-    const drawStartKey = drawInteraction.current.on("drawstart", () => {
+    map.addInteraction(drawInteractionRef.current);
+
+    const drawStartKey = drawInteractionRef.current.on("drawstart", () => {
       setDrawing(true);
       changeCursor();
     });
 
-    const drawEndKey = drawInteraction.current.on("drawend", () => {
+    const drawEndKey = drawInteractionRef.current.on("drawend", () => {
       setDrawing(false);
       changeCursor();
+      setCounterFeatures((prevCounter) => prevCounter + 1);
     });
 
     return () => {
       unByKey(drawStartKey);
       unByKey(drawEndKey);
-      map.removeInteraction(drawInteraction.current);
-      map.removeLayer(drawLayer);
     };
-  }, [map, geometryType]);
+  }, [map, geometryType, setCounterFeatures]);
 
   const changeCursor = () => {
     const mapElement = map.getTargetElement();

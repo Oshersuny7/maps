@@ -8,7 +8,7 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { useGeographic } from "ol/proj";
 import GeoJSON from "ol/format/GeoJSON.js";
-import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Button, Grid, MenuItem, Select, Typography } from "@mui/material";
 import PopoverComponent from "./PopOverComponent";
 import DrawComponent from "./DrawComponent";
 import SearchComponent from "./SearchComponent";
@@ -22,6 +22,7 @@ const MapComponent = () => {
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
   const [drawing, setDrawing] = useState(false);
   const [drawingInProgress, setDrawingInProgress] = useState(false);
+  const [counterFeatures,setCounterFeatures] = useState(0);
   const containerRef = useRef(null);
   const anchorElRef = useRef(null);
   const geometryTypes = ["Point", "LineString", "Polygon", "Circle", "None"];
@@ -101,15 +102,16 @@ const MapComponent = () => {
     return () => {
       map.un("click", handlePopOver);
     };
-  }, [map, drawingInProgress]);
+  }, [map, drawingInProgress,counterFeatures]);
 
   useEffect(() => {
     if (drawing) {
       setDrawingInProgress(true);
+      console.log(counterFeatures);
     } else {
       setDrawingInProgress(false);
     }
-  }, [drawing]);
+  }, [drawing,counterFeatures]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -121,57 +123,76 @@ const MapComponent = () => {
       .getLayers()
       .getArray()
       .find((layer) => layer.getProperties().name === DrawLayer);
-    if (layerToRemove) map.removeLayer(layerToRemove);
+    if (layerToRemove) {
+      map.removeLayer(layerToRemove);
+      setCounterFeatures(0);
+    }
   };
+  
 
+ 
   return (
-    <Box>
-      <Box
-        ref={containerRef}
-        id="map"
-        style={{ width: "100%", height: "500px" }}
-      ></Box>
+    <Box sx={{ height: "90vh", display: "flex", flexDirection: "column"  }}>
+      <Box sx={{ flex: "1" }}>
+        <Box
+          ref={containerRef}
+          id="map"
+          style={{ width: "100%", height: "100%" }}
+        ></Box>
+      </Box>
+      <Box  sx={{ p: 2 }}>
+
+
+        <Grid
+          container
+          spacing={2}
+          justifyContent="sapce around"
+          alignItems="center"
+          >          
+          <Grid item xs={12} sm={6} lg={3}>
+            <SearchComponent />
+          </Grid>
+          <Grid item xs={12} sm={6} lg={3}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography sx={{ mr: 2 }}>Geometry type:</Typography>
+              <Select
+                defaultValue="None"
+                onChange={(event) => setDrawing(event.target.value)}
+                >
+                {geometryTypes.map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} lg={3}>
+            <Typography sx={{ display: "block", mb: 1 }}>
+              Feature Added in total: {counterFeatures}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} lg={3}>
+            <Button variant="contained" color="error" onClick={handleDelete}>
+              Delete all Draws
+            </Button>
+          </Grid>
+             
+        </Grid>
+      </Box>
       <PopoverComponent
         open={openModal}
         handleClose={handleCloseModal}
         selectedPlaceProperties={selectedPlaceProperties}
         anchorElRef={anchorElRef}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          marginTop: "5px",
-        }}
-      >
-        {/* <SearchComponent /> */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography>Geometry type:</Typography>
-          <Select
-            defaultValue="None"
-            onChange={(event) => setDrawing(event.target.value)}
-          >
-            {geometryTypes.map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
-
-        <Button variant="contained" color="error" onClick={handleDelete}>
-          {" "}
-          Delete all Draws
-        </Button>
-      </Box>
-      {drawing && map && <DrawComponent map={map} geometryType={drawing} />}
+        />
+      {drawing && map && (
+        <DrawComponent
+        map={map}
+        geometryType={drawing}
+        setCounterFeatures={setCounterFeatures}
+        />
+        )}
     </Box>
   );
 };
