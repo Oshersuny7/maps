@@ -5,10 +5,11 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import DrawLayer from "./utils/LayersName";
 
-const DrawComponent = ({ map, geometryType, setCounterFeatures }) => {
+const DrawComponent = ({ map, geometryType, incrementCounter }) => { 
   const drawLayerRef = useRef(null);
   const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
+  
 
   useEffect(() => {
     if (!map || !geometryType) return;
@@ -49,15 +50,14 @@ const DrawComponent = ({ map, geometryType, setCounterFeatures }) => {
     const drawEndKey = drawInteractionRef.current.on("drawend", () => {
       setDrawing(false);
       changeCursor();
-      setCounterFeatures((prevCounter) => prevCounter + 1);
+      incrementCounter(); 
     });
   
     return () => {
       unByKey(drawStartKey);
       unByKey(drawEndKey);
     };
-  }, [map, geometryType, setCounterFeatures]);
-  
+  }, [map, geometryType, incrementCounter]); 
 
   const changeCursor = (cursorType = "crosshair") => {
     const mapElement = map.getTargetElement();

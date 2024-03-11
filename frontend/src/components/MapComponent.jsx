@@ -14,6 +14,7 @@ import DrawComponent from "./DrawComponent";
 import SearchComponent from "./SearchComponent";
 import { COORDINATES_JSON_PATH, SIBIRUNI_JSON_PATH } from "./utils/FilePaths";
 import DrawLayer from "./utils/LayersName";
+import { useCounterFeatures } from "./hooks/CounterFeautersHook";
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
@@ -22,10 +23,10 @@ const MapComponent = () => {
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
   const [drawing, setDrawing] = useState(false);
   const [drawingInProgress, setDrawingInProgress] = useState(false);
-  const [counterFeatures,setCounterFeatures] = useState(0);
   const containerRef = useRef(null);
   const anchorElRef = useRef(null);
   const geometryTypes = ["Point", "LineString", "Polygon", "Circle", "None"];
+  const { counterFeatures, incrementCounter, resetCounter } = useCounterFeatures();
 
   useEffect(() => {
     useGeographic();
@@ -54,10 +55,12 @@ const MapComponent = () => {
     fetch(COORDINATES_JSON_PATH)
       .then((response) => response.json())
       .then((data) => {
-        return new GeoJSON().readFeatures(data);
-      })
-      .then((features) => {
-        vectorLayer.getSource().addFeatures(features);
+        const features = new GeoJSON().readFeatures(data);
+        if (vectorLayer.getSource() instanceof VectorSource) {
+          vectorLayer.getSource().addFeatures(features);
+        } else {
+          console.error('Vector layer source is not properly initialized');
+        }
       })
       .catch((error) => {
         console.error('Error loading GeoJSON:', error);
@@ -69,15 +72,17 @@ const MapComponent = () => {
     fetch(SIBIRUNI_JSON_PATH)
       .then((response) => response.json())
       .then((data) => {
-        return new GeoJSON().readFeatures(data);
-      })
-      .then((features) => {
-        vectorLayer.getSource().addFeatures(features);
+        const features = new GeoJSON().readFeatures(data);
+        if (vectorLayer.getSource() instanceof VectorSource) {
+          vectorLayer.getSource().addFeatures(features);
+        } else {
+          console.error('Vector layer source is not properly initialized');
+        }
       })
       .catch((error) => {
         console.error('Error loading GeoJSON:', error);
       });
-  }, [vectorLayer, map]);
+  }, [vectorLayer]);
 
   useEffect(() => {
     if (!map) return;
@@ -102,16 +107,15 @@ const MapComponent = () => {
     return () => {
       map.un("click", handlePopOver);
     };
-  }, [map, drawingInProgress,counterFeatures]);
+  }, [map, drawingInProgress, counterFeatures]);
 
   useEffect(() => {
     if (drawing) {
       setDrawingInProgress(true);
-      console.log(counterFeatures);
     } else {
       setDrawingInProgress(false);
     }
-  }, [drawing,counterFeatures]);
+  }, [drawing]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -124,41 +128,35 @@ const MapComponent = () => {
       .getArray()
       .find((layer) => layer.getProperties().name === DrawLayer);
     if (layerToRemove) {
-      map.removeLayer(layerToRemove);
-      setCounterFeatures(0);
+      const source = layerToRemove.getSource();
+      if (source instanceof VectorSource) {
+        source.clear();
+      } else {
+        console.error('Vector layer source is not properly initialized');
+      }
+      resetCounter();
     }
   };
-  
 
- 
   return (
-    <Box sx={{ height: "90vh", display: "flex", flexDirection: "column"  }}>
-      <Box sx={{ flex: "1" }}>
-        <Box
-          ref={containerRef}
-          id="map"
-          style={{ width: "100%", height: "100%" }}
-        ></Box>
-      </Box>
-      <Box  sx={{ p: 2 }}>
-
-
+    <Box sx={{ height: "90vh", display: "flex", flexDirection: "column" }}>
+      <Box sx={{ p: 2 }}>
         <Grid
           container
           spacing={2}
-          justifyContent="sapce around"
+          justifyContent="space-around"
           alignItems="center"
-          >          
+        >
           <Grid item xs={12} sm={6} lg={3}>
-            <SearchComponent />
+            <SearchComponent map={map} />
           </Grid>
-          <Grid item xs={12} sm={6} lg={3}>
+          <Grid item xs={12} sm={6} lg={2}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography sx={{ mr: 2 }}>Geometry type:</Typography>
               <Select
                 defaultValue="None"
                 onChange={(event) => setDrawing(event.target.value)}
-                >
+              >
                 {geometryTypes.map((type) => (
                   <MenuItem key={type} value={type}>
                     {type}
@@ -167,32 +165,44 @@ const MapComponent = () => {
               </Select>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} lg={3}>
+          <Grid item xs={12} sm={6} lg={2}>
             <Typography sx={{ display: "block", mb: 1 }}>
-              Feature Added in total: {counterFeatures}
+              Features Added in total: {counterFeatures}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} lg={3}>
+          <Grid item xs={12} sm={6} lg={2}>
+            <Typography sx={{ display: "block", mb: 1 }}>
+              Features in polygon: {}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} lg={2}>
             <Button variant="contained" color="error" onClick={handleDelete}>
               Delete all Draws
             </Button>
           </Grid>
-             
         </Grid>
       </Box>
+      <Box sx={{ flex: "1" }}>
+        <Box
+          ref={containerRef}
+          id="map"
+          style={{ width: "100%", height: "100%" }}
+        ></Box>
+      </Box>
+
       <PopoverComponent
         open={openModal}
         handleClose={handleCloseModal}
         selectedPlaceProperties={selectedPlaceProperties}
         anchorElRef={anchorElRef}
-        />
+      />
       {drawing && map && (
         <DrawComponent
-        map={map}
-        geometryType={drawing}
-        setCounterFeatures={setCounterFeatures}
+          map={map}
+          geometryType={drawing}
+          incrementCounter={incrementCounter}
         />
-        )}
+      )}
     </Box>
   );
 };
