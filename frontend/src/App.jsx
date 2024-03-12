@@ -5,7 +5,6 @@ function App() {
 
   return (
     <Box className="App">
-    <Typography>Maps Application</Typography>
     <MapComponent />
   </Box>
   )

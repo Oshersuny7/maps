@@ -15,6 +15,7 @@ import SearchComponent from "./SearchComponent";
 import { COORDINATES_JSON_PATH, SIBIRUNI_JSON_PATH } from "./utils/FilePaths";
 import DrawLayer from "./utils/LayersName";
 import { useCounterFeatures } from "./hooks/CounterFeautersHook";
+import useCounterFeaturesInPolygon from "./hooks/CounterFeaturesInPolygonHook";
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
@@ -27,6 +28,7 @@ const MapComponent = () => {
   const anchorElRef = useRef(null);
   const geometryTypes = ["Point", "LineString", "Polygon", "Circle", "None"];
   const { counterFeatures, incrementCounter, resetCounter } = useCounterFeatures();
+  const { counterFeaturesInPolygon } = useCounterFeaturesInPolygon(map, vectorLayer);
 
   useEffect(() => {
     useGeographic();
@@ -147,10 +149,10 @@ const MapComponent = () => {
           justifyContent="space-around"
           alignItems="center"
         >
-          <Grid item xs={12} sm={6} lg={3}>
+          <Grid item xs={12} sm={12} lg={3}>
             <SearchComponent map={map} />
           </Grid>
-          <Grid item xs={12} sm={6} lg={2}>
+          <Grid item xs={12} sm={12} lg={3}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography sx={{ mr: 2 }}>Geometry type:</Typography>
               <Select
@@ -165,17 +167,17 @@ const MapComponent = () => {
               </Select>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} lg={2}>
+          <Grid item xs={12} sm={12} lg={2}>
             <Typography sx={{ display: "block", mb: 1 }}>
               Features Added in total: {counterFeatures}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} lg={2}>
+          <Grid item xs={12} sm={12} lg={2}>
             <Typography sx={{ display: "block", mb: 1 }}>
-              Features in polygon: {}
+              Features in polygon: {counterFeaturesInPolygon}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} lg={2}>
+          <Grid item xs={12} sm={12} lg={2}>
             <Button variant="contained" color="error" onClick={handleDelete}>
               Delete all Draws
             </Button>
