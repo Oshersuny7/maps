@@ -1,13 +1,18 @@
-import { Box, Typography } from '@mui/material'
-import './App.css'
-import MapComponent from './components/MapComponent'
+import { Box } from "@mui/material";
+import "./App.css";
+import MapComponent from "./components/MapComponent";
+import { CounterTotalFeatureContextProvider } from "./hooks/contexts/features/CounterTotalFeaturesContext";
+import { MapContextProvider } from "./hooks/contexts/map/MapContext";
 function App() {
-
   return (
     <Box className="App">
-    <MapComponent />
-  </Box>
-  )
+      <MapContextProvider>
+      <CounterTotalFeatureContextProvider>
+        <MapComponent />
+      </CounterTotalFeatureContextProvider>
+      </MapContextProvider>
+    </Box>
+  );
 }
 
-export default App
+export default App;

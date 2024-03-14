@@ -1,4 +1,2 @@
 const DrwaLayer = "drawLayer";
-export default{
-  DrwaLayer
-}
+export default{ DrwaLayer}

@@ -22,7 +22,7 @@ const useCounterFeaturesInPolygon = (map, drawLayer) => {
 
                     console.log("Feature Geometry:", featureGeometry);
 
-                    if (featureGeometry && polygonGeometry.intersectsCoordinate(featureGeometry.getCoordinates())) {
+                    if (featureGeometry && polygonGeometry.intersects(featureGeometry,)) {
                         count++;
                     }
                 });

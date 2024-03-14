@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useCounterFeatures = () => {
+export const useCounterTotalFeatures = () => {
   const [counterFeatures, setCounterFeatures] = useState(0);
 
   const incrementCounter = () => {
