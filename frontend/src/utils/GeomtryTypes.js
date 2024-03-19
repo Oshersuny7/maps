@@ -1,0 +1,1 @@
+ export const geometryTypes = ["Point", "LineString", "Polygon", "Circle", "None"];

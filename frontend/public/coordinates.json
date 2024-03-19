@@ -4,6 +4,7 @@
     {
       "type": "Feature",
       "properties": {
+        "layer":"IsraelLayer",
         "location":"Israel",
         "coordinates":"35.57795050595112, 33.26793766635659",
         "degrees":"25 C"

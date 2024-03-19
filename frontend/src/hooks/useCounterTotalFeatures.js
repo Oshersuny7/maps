@@ -1,15 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { CounterTotalFeatureContext } from "./contexts/features/CounterTotalFeaturesContext";
 
 export const useCounterTotalFeatures = () => {
-  const [counterFeatures, setCounterFeatures] = useState(0);
-
-  const incrementCounter = () => {
-    setCounterFeatures((prevCounter) => prevCounter + 1);
-  };
-
-  const resetCounter = () => {
-    setCounterFeatures(0);
-  };
-
-  return { counterFeatures, incrementCounter, resetCounter };
+  const { counterFeatures, incrementCounter, resetCounter } = useContext(CounterTotalFeatureContext);
+  return{counterFeatures, incrementCounter, resetCounter};
 };
+

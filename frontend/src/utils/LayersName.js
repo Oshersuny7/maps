@@ -1,2 +1,7 @@
-const DrwaLayer = "drawLayer";
-export default{ DrwaLayer}
+const layers = {
+  Draw: "drawLayer",
+  LayerA: "LayerA",
+  LayerB: "LayerB",
+};
+
+export default { layers };

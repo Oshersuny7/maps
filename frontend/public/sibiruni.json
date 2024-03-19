@@ -4,6 +4,7 @@
       {
         "type": "Feature",
         "properties": {
+            "layer":"SibirLayer",
             "location":"Sibir",
             "coordinates":"92.7701965158642, 56.00376353210146",
             "degrees":"-25 C"

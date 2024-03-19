@@ -1,0 +1,42 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "LayerA",
+        "location": "",
+        "coordinates": "",
+        "degrees": ""
+      },
+      "geometry": {
+        "coordinates": [20.619293906421717, 8.346736585389976],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "layer": "LayerA" },
+      "geometry": {
+        "coordinates": [21.38185375039933, 8.432435234417142],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "layer": "LayerA" },
+      "geometry": {
+        "coordinates": [21.095450193154534, 8.151845490769915],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "layer": "LayerA" },
+      "geometry": {
+        "coordinates": [20.956400192989776, 8.616381841271306],
+        "type": "Point"
+      }
+    }
+  ]
+}
