@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { TextField, IconButton, Alert, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useMap } from "../../hooks/contexts/map/MapContext";
 
-const SearchComponent = ({ map }) => {
+const SearchComponent = () => {
   const [searchInput, setSearchInput] = useState("");
   const [error, setError] = useState(false);
+  const map = useMap();
 
   const handleSearch = () => {
     fetch(

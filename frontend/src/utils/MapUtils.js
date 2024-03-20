@@ -12,7 +12,6 @@ const ISRAEL_CENTER_COORDINATE = fromLonLat([31, 35]);
 const defaultMapParams = {
   zoom: DEFAULT_ZOOM_LEVEL,
   center: ISRAEL_CENTER_COORDINATE,
-  projection: "EPSG:4326",
 };
 
 const createMap = () => {
@@ -47,6 +46,7 @@ const addFeaturesToVectorLayer = (vectorLayer, features) => {
     }
   }
 };
+
 const getLayerByPropertyName = (map, propertyName) => {
   console.log(map);
   return map

@@ -5,9 +5,9 @@
       "type": "Feature",
       "properties": {
         "layer": "LayerA",
-        "location": "",
-        "coordinates": "",
-        "degrees": ""
+        "location": "Sudan",
+        "coordinates": "20.619293906421717, 8.346736585389976",
+        "degrees": "500 C"
       },
       "geometry": {
         "coordinates": [20.619293906421717, 8.346736585389976],
@@ -16,7 +16,12 @@
     },
     {
       "type": "Feature",
-      "properties": { "layer": "LayerA" },
+      "properties": {
+        "layer": "LayerA",
+        "location": "Sudan",
+        "coordinates": "21.38185375039933, 8.432435234417142",
+        "degrees": "500 C"
+      },
       "geometry": {
         "coordinates": [21.38185375039933, 8.432435234417142],
         "type": "Point"
@@ -24,7 +29,12 @@
     },
     {
       "type": "Feature",
-      "properties": { "layer": "LayerA" },
+      "properties": {
+        "layer": "LayerA",
+        "location": "Sudan",
+        "coordinates": "21.095450193154534, 8.151845490769915",
+        "degrees": "500 C"
+      },
       "geometry": {
         "coordinates": [21.095450193154534, 8.151845490769915],
         "type": "Point"
@@ -32,7 +42,12 @@
     },
     {
       "type": "Feature",
-      "properties": { "layer": "LayerA" },
+      "properties": {
+        "layer": "LayerA",
+        "location": "Sudan",
+        "coordinates": "20.956400192989776, 8.616381841271306",
+        "degrees": "500 C"
+      },
       "geometry": {
         "coordinates": [20.956400192989776, 8.616381841271306],
         "type": "Point"

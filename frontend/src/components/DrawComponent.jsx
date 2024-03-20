@@ -5,8 +5,10 @@ import { createVectorLayer } from "../utils/MapUtils";
 import LayersName from "../utils/LayersName";
 import { Alert, Box, Typography } from "@mui/material";
 import useFeaturesAmount from "../hooks/useFeaturesAmount";
+import { useMap } from "../hooks/contexts/map/MapContext";
 
-const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) => {
+const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
+  const mapRef = useRef(useMap());
   const drawLayerRef = useRef(null);
   const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -14,11 +16,11 @@ const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) 
   const [featureCounts, setFeatureCounts] = useState(null);
 
   useEffect(() => {
-    if (!map || !geometryType) return;
+    if (!mapRef.current || !geometryType) return;
 
     if (geometryType === "None") {
       if (drawInteractionRef.current) {
-        map.removeInteraction(drawInteractionRef.current);
+        mapRef.current.removeInteraction(drawInteractionRef.current);
         drawInteractionRef.current = null;
       }
       changeCursor("default");
@@ -27,11 +29,12 @@ const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) 
 
     if (!drawLayerRef.current) {
       drawLayerRef.current = createVectorLayer(LayersName.layers.Draw);
-      map.addLayer(drawLayerRef.current);
+      mapRef.current.addLayer(drawLayerRef.current);
+      console.log(drawLayerRef.current);
     }
 
     if (drawInteractionRef.current) {
-      map.removeInteraction(drawInteractionRef.current);
+      mapRef.current.removeInteraction(drawInteractionRef.current);
     }
 
     drawInteractionRef.current = new Draw({
@@ -39,7 +42,7 @@ const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) 
       type: geometryType,
     });
 
-    map.addInteraction(drawInteractionRef.current);
+    mapRef.current.addInteraction(drawInteractionRef.current);
 
     const drawStartKey = drawInteractionRef.current.on("drawstart", () => {
       setDrawing(true);
@@ -59,7 +62,7 @@ const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) 
       unByKey(drawStartKey);
       unByKey(drawEndKey);
     };
-  }, [map, geometryType, incrementCounter]);
+  }, [mapRef.current, geometryType, incrementCounter]);
 
   useEffect(() => {
     if (polygonFeature && polygonFeature.getGeometry()) {
@@ -69,13 +72,9 @@ const DrawComponent = ({ map, geometryType, incrementCounter, polygonFeature }) 
   }, [polygonFeature]);
 
   const changeCursor = (cursorType = "crosshair") => {
-    const mapElement = map.getTargetElement();
+    const mapElement = mapRef.current.getTargetElement();
     mapElement.style.cursor = cursorType;
   };
-
-  useEffect(() => {
-    console.log("Feature counts:", featureCounts);
-  }, [featureCounts]);
 
   return (
     <>

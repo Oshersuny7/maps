@@ -1,12 +1,10 @@
-import React, { createContext, useContext, useRef } from 'react'
-import { createMap } from "../../../utils/MapUtils"
+import React, { createContext, useContext } from 'react'
 
 export const MapContext = createContext();
 
-export const MapContextProvider = ({children}) => {
-  const mapRef = useRef(createMap());
+export const MapContextProvider = ({children, map}) => {
   return (
-    <MapContext.Provider value= {mapRef.current}>
+    <MapContext.Provider value={map}>
         {children}
     </MapContext.Provider>
   )

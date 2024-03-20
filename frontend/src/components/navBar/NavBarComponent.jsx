@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { Box, Button, Grid, MenuItem, Select, Typography } from "@mui/material";
 import { geometryTypes } from "../../utils/GeomtryTypes";
 import SearchComponent from "./SearchComponent";
+import { useMap } from "../../hooks/contexts/map/MapContext";
 
-const NavBarComponent = ({
-  map,
-  setDrawing,
-  counterFeatures,
-  handleDelateAll,
-}) => {
+const NavBarComponent = ({ setDrawing, counterFeatures, handleDelateAll }) => {
+  const map = useMap();
   const [drawMode, setDrawMode] = useState("Polygon");
 
   const handleDrawButtonClick = () => {
@@ -55,7 +52,7 @@ const NavBarComponent = ({
       </Grid>
       <Grid item xs={12} sm={12} lg={2}>
         <Button variant="contained" color="error" onClick={handleDelateAll}>
-          Delete all Draws
+          Clear all Draws
         </Button>
       </Grid>
     </Grid>
