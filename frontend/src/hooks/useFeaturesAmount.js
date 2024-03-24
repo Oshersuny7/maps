@@ -1,35 +1,18 @@
-import { getLayerByPropertyName } from "../utils/MapUtils";
-import LayersName from "../utils/LayersName";
-import { useMap } from "./contexts/map/MapContext";
-import { useRef } from "react";
-
-const useFeaturesAmount = ({ polygonFeature }) => {
-  const mapRef = useRef(useMap());
-  const counts = {};
-  for (const [layerName, layer] of Object.entries(LayersName.layers)) {
-    if (layer !== LayersName.layers.Draw) {
-      console.log(layer);
-      const currentLayer = getLayerByPropertyName(mapRef.current, layer);
-      if (currentLayer) {
-        const source = currentLayer.getSource();
-        let count = 0;
-        source.forEachFeature((feature) => {
-          const properties = feature.getProperties();
-          if (
-            properties &&
-            properties.layer === layerName &&
-            feature
-              .getGeometry()
-              .intersectsPolygon(polygonFeature.getGeometry())
-          ) {
-            count++;
+const useFeaturesAmount = (layers, geometry) => {
+  console.log(layers);
+      const counter = new Array(layers.length).fill(0)
+      const type = geometry.getType();
+      if (type === "Polygon") {
+        layers.forEach((layer,index) =>
+        layer.getSource().forEachFeature(function(feature){
+          const coordinates = feature.getGeometry().getCoordinates()
+          if(geometry.intersectsCoordinate(coordinates)) {
+              counter[index] += 1;
           }
-        });
-        counts[layerName] = count;
+        })
+        );
       }
-    }
+      return counter
   }
-  return counts;
-};
 
-export default useFeaturesAmount;
+export default useFeaturesAmount

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Button, Grid, MenuItem, Select, Typography } from "@mui/material";
 import { geometryTypes } from "../../utils/GeomtryTypes";
 import SearchComponent from "./SearchComponent";
@@ -6,17 +6,6 @@ import { useMap } from "../../hooks/contexts/map/MapContext";
 
 const NavBarComponent = ({ setDrawing, counterFeatures, handleDelateAll }) => {
   const map = useMap();
-  const [drawMode, setDrawMode] = useState("Polygon");
-
-  const handleDrawButtonClick = () => {
-    if (drawMode === "Polygon") {
-      setDrawMode("Cancel");
-      setDrawing("Polygon");
-    } else {
-      setDrawMode("Polygon");
-      setDrawing("None");
-    }
-  };
   return (
     <Grid
       container
@@ -45,11 +34,7 @@ const NavBarComponent = ({ setDrawing, counterFeatures, handleDelateAll }) => {
       <Grid item xs={12} sm={12} lg={2}>
         <Typography>Features Added in total: {counterFeatures}</Typography>
       </Grid>
-      <Grid item xs={12} sm={12} lg={2}>
-        <Button variant="contained" onClick={handleDrawButtonClick}>
-          {drawMode === "Polygon" ? "Draw polygon" : "Cancel drawing"}
-        </Button>
-      </Grid>
+
       <Grid item xs={12} sm={12} lg={2}>
         <Button variant="contained" color="error" onClick={handleDelateAll}>
           Clear all Draws

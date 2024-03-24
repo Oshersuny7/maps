@@ -5,6 +5,7 @@ import View from "ol/View";
 import { OSM } from "ol/source";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
+import LayersName from "./LayersName";
 
 const DEFAULT_ZOOM_LEVEL = 2;
 const ISRAEL_CENTER_COORDINATE = fromLonLat([31, 35]);
@@ -62,6 +63,16 @@ const createVectorLayer = (layerName) => {
   });
 };
 
+const getArrayOfVectorLayersWithoutDrawing = (map) => {
+  return map
+    .getAllLayers()
+    .filter(
+      (layer) =>
+        layer instanceof VectorLayer &&
+        layer.getProperties().name !== LayersName.layers.Draw
+    );
+};
+
 export {
   createMap,
   getLayerByName,
@@ -69,4 +80,5 @@ export {
   addFeaturesToVectorLayer,
   createVectorLayer,
   getLayerByPropertyName,
+  getArrayOfVectorLayersWithoutDrawing
 };

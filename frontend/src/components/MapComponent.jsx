@@ -13,14 +13,15 @@ import { useCounterTotalFeatures } from "../hooks/useCounterTotalFeatures";
 import LayersName from "../utils/LayersName";
 import PopoverComponent from "./overlays/PopOverComponent";
 import { useMap } from "../hooks/contexts/map/MapContext";
+import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 
 const MapComponent = () => {
   const mapRef = useRef(useMap());
   const [vectorLayer, setVectorLayer] = useState(null);
   const [drawing, setDrawing] = useState(false);
-  const [drawingInProgress, setDrawingInProgress] = useState(false);
   const containerRef = useRef(null);
-  const { counterFeatures, incrementCounter, resetCounter, polygonFeature } = useCounterTotalFeatures();
+  const {drawingInProgress, setDrawingInProgress} = useDrawingInProgress();
+  const { counterFeatures, incrementCounter, resetCounter } = useCounterTotalFeatures();
 
   useEffect(() => {
     useGeographic();
@@ -35,7 +36,9 @@ const MapComponent = () => {
   }, []);
 
   useEffect(() => {
-    drawing ? setDrawingInProgress(true) : setDrawingInProgress(false);
+    if(drawing !== "None"){
+      drawing ? setDrawingInProgress(true) : setDrawingInProgress(false);
+    }
   }, [drawing]);
 
   const handleDelateAll = () => {
@@ -66,17 +69,14 @@ const MapComponent = () => {
         <GeoJSONLoader vectorLayer={vectorLayer} url={COORDINATES_JSON_PATH} />
         <GeoJSONLoader vectorLayer={vectorLayer} url={SIBIRUNI_JSON_PATH} />
         <GeoJSONLoader vectorLayer={vectorLayer} url={LayerA_JSON_PATH} />
-        <GeoJSONLoader vectorLayer={vectorLayer} url={LayerB_JSON_PATH} />
+        {/* <GeoJSONLoader vectorLayer={vectorLayer} url={LayerB_JSON_PATH} /> */}
       </Box>
       <PopoverComponent
-        drawingInProgress={drawingInProgress}
-        drawing={drawing}
       />
       {drawing && (
         <DrawComponent
           geometryType={drawing}
           incrementCounter={incrementCounter}
-          polygonFeature={polygonFeature}
         />
       )}
     </Box>

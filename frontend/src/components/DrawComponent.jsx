@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draw from "ol/interaction/Draw.js";
 import { unByKey } from "ol/Observable.js";
-import { createVectorLayer } from "../utils/MapUtils";
+import {createVectorLayer,getArrayOfVectorLayersWithoutDrawing,} from "../utils/MapUtils";
 import LayersName from "../utils/LayersName";
 import { Alert, Box, Typography } from "@mui/material";
 import useFeaturesAmount from "../hooks/useFeaturesAmount";
 import { useMap } from "../hooks/contexts/map/MapContext";
+import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 
-const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
+const DrawComponent = ({ geometryType, incrementCounter}) => {
+  const {setDrawingInProgress} = useDrawingInProgress();
   const mapRef = useRef(useMap());
   const drawLayerRef = useRef(null);
   const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
   const [polygonDrawn, setPolygonDrawn] = useState(false);
-  const [featureCounts, setFeatureCounts] = useState(null);
+  const [counterArray, setCounterArray] = useState(null);
 
   useEffect(() => {
     if (!mapRef.current || !geometryType) return;
@@ -22,6 +24,7 @@ const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
       if (drawInteractionRef.current) {
         mapRef.current.removeInteraction(drawInteractionRef.current);
         drawInteractionRef.current = null;
+        setDrawingInProgress(false);
       }
       changeCursor("default");
       return;
@@ -30,7 +33,6 @@ const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
     if (!drawLayerRef.current) {
       drawLayerRef.current = createVectorLayer(LayersName.layers.Draw);
       mapRef.current.addLayer(drawLayerRef.current);
-      console.log(drawLayerRef.current);
     }
 
     if (drawInteractionRef.current) {
@@ -50,6 +52,11 @@ const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
     });
 
     const drawEndKey = drawInteractionRef.current.on("drawend", (event) => {
+      const layersWithoutDrawing = getArrayOfVectorLayersWithoutDrawing( mapRef.current);
+      const geometry = event.feature.getGeometry();
+      const counter = useFeaturesAmount(layersWithoutDrawing, geometry);
+      console.log(counter);
+      setCounterArray(counter);
       setDrawing(false);
       if (geometryType === "Polygon") {
         setPolygonDrawn(true);
@@ -62,14 +69,7 @@ const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
       unByKey(drawStartKey);
       unByKey(drawEndKey);
     };
-  }, [mapRef.current, geometryType, incrementCounter]);
-
-  useEffect(() => {
-    if (polygonFeature && polygonFeature.getGeometry()) {
-      const counts = useFeaturesAmount({ polygonFeature });
-      setFeatureCounts(counts);
-    }
-  }, [polygonFeature]);
+  }, [mapRef.current, geometryType, incrementCounter, counterArray]);
 
   const changeCursor = (cursorType = "crosshair") => {
     const mapElement = mapRef.current.getTargetElement();
@@ -81,20 +81,17 @@ const DrawComponent = ({ geometryType, incrementCounter, polygonFeature }) => {
       {polygonDrawn && geometryType === "Polygon" && (
         <Alert severity="info">
           <Box>
-            {Object.values(LayersName.layers).map((layerName) => (
-              <Box
-                sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-                key={layerName}
-              >
-                <Typography>
-                  {layerName} has:{" "}
-                  {featureCounts && featureCounts[layerName] !== undefined
-                    ? featureCounts[layerName]
-                    : "0"}{" "}
-                  features
+            {Object.keys(LayersName.layers)
+              .filter(
+                (layerKey) =>
+                  LayersName.layers[layerKey] !== LayersName.layers.Draw
+              )
+              .map((layerKey, index) => (
+                <Typography key={layerKey}>
+                  {LayersName.layers[layerKey]}:{" "}
+                  {counterArray[index] ? counterArray[index] : 0} features
                 </Typography>
-              </Box>
-            ))}
+              ))}
           </Box>
         </Alert>
       )}

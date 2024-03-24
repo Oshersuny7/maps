@@ -4,7 +4,7 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerB",
+        "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.70258989577644, 8.442167327600202",
         "degrees": "450 C"
@@ -17,7 +17,7 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerB",
+        "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.471547541670503, 8.133260990964246",
         "degrees": "450 C"
@@ -30,7 +30,7 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerB",
+        "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.658849439393663, 8.343341174037661",
         "degrees": "450 C"

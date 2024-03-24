@@ -4,9 +4,9 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerA",
+        "name": "LayerA",
         "location": "Sudan",
-        "coordinates": "20.619293906421717, 8.346736585389976",
+        "coordinates": "20.619, 8.346",
         "degrees": "500 C"
       },
       "geometry": {
@@ -17,9 +17,9 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerA",
+        "name": "LayerA",
         "location": "Sudan",
-        "coordinates": "21.38185375039933, 8.432435234417142",
+        "coordinates": "21.381, 8.432",
         "degrees": "500 C"
       },
       "geometry": {
@@ -30,9 +30,9 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerA",
+        "name": "LayerA",
         "location": "Sudan",
-        "coordinates": "21.095450193154534, 8.151845490769915",
+        "coordinates": "21.095, 8.151",
         "degrees": "500 C"
       },
       "geometry": {
@@ -43,13 +43,52 @@
     {
       "type": "Feature",
       "properties": {
-        "layer": "LayerA",
+        "name": "LayerA",
         "location": "Sudan",
-        "coordinates": "20.956400192989776, 8.616381841271306",
+        "coordinates": "20.956, 8.616",
         "degrees": "500 C"
       },
       "geometry": {
         "coordinates": [20.956400192989776, 8.616381841271306],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerB",
+        "location": "Sudan",
+        "coordinates": "21.702, 8.442",
+        "degrees": "450 C"
+      },
+      "geometry": {
+        "coordinates": [21.70258989577644, 8.442167327600202],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerB",
+        "location": "Sudan",
+        "coordinates": "21.471, 8.133",
+        "degrees": "450 C"
+      },
+      "geometry": {
+        "coordinates": [21.471547541670503, 8.133260990964246],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerB",
+        "location": "Sudan",
+        "coordinates": "21.658, 8.343",
+        "degrees": "450 C"
+      },
+      "geometry": {
+        "coordinates": [21.658849439393663, 8.343341174037661],
         "type": "Point"
       }
     }
