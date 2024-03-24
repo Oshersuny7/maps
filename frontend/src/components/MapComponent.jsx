@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "ol/ol.css";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 import { useGeographic } from "ol/proj";
 import { Box } from "@mui/material";
 import DrawComponent from "./DrawComponent";
-import { COORDINATES_JSON_PATH,LayerA_JSON_PATH,LayerB_JSON_PATH, SIBIRUNI_JSON_PATH,} from "../utils/FilePaths";
+import { Features_JSON_PATH } from "../utils/FilePaths";
 import { clearVectorLayer, getLayerByName } from "../utils/MapUtils";
 import GeoJSONLoader from "./GeoJSONLoader";
 import NavBarComponent from "./navBar/NavBarComponent";
@@ -17,32 +15,29 @@ import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 
 const MapComponent = () => {
   const mapRef = useRef(useMap());
-  const [vectorLayer, setVectorLayer] = useState(null);
   const [drawing, setDrawing] = useState(false);
   const containerRef = useRef(null);
-  const {drawingInProgress, setDrawingInProgress} = useDrawingInProgress();
-  const { counterFeatures, incrementCounter, resetCounter } = useCounterTotalFeatures();
+  const { setDrawingInProgress } = useDrawingInProgress();
+  const { resetCounter } = useCounterTotalFeatures();
 
   useEffect(() => {
     useGeographic();
     if (mapRef.current && containerRef.current) {
-      const vectorLayer = new VectorLayer({
-        source: new VectorSource(),
-      });
-      mapRef.current.addLayer(vectorLayer);
-      setVectorLayer(vectorLayer);
       mapRef.current.setTarget(containerRef.current);
     }
   }, []);
 
   useEffect(() => {
-    if(drawing !== "None"){
+    if (drawing !== "None") {
       drawing ? setDrawingInProgress(true) : setDrawingInProgress(false);
     }
   }, [drawing]);
 
   const handleDelateAll = () => {
-    const layerToRemove = getLayerByName(mapRef.current, LayersName.layers.Draw);
+    const layerToRemove = getLayerByName(
+      mapRef.current,
+      LayersName.layers.Draw
+    );
     if (layerToRemove) {
       clearVectorLayer(layerToRemove);
       resetCounter();
@@ -56,7 +51,6 @@ const MapComponent = () => {
       <Box sx={{ p: 2 }}>
         <NavBarComponent
           setDrawing={setDrawing}
-          counterFeatures={counterFeatures}
           handleDelateAll={handleDelateAll}
         />
       </Box>
@@ -66,20 +60,12 @@ const MapComponent = () => {
           id="map"
           style={{ width: "100%", height: "100%" }}
         ></Box>
-        <GeoJSONLoader vectorLayer={vectorLayer} url={COORDINATES_JSON_PATH} />
-        <GeoJSONLoader vectorLayer={vectorLayer} url={SIBIRUNI_JSON_PATH} />
-        <GeoJSONLoader vectorLayer={vectorLayer} url={LayerA_JSON_PATH} />
-        {/* <GeoJSONLoader vectorLayer={vectorLayer} url={LayerB_JSON_PATH} /> */}
+        <GeoJSONLoader url={Features_JSON_PATH} />
       </Box>
-      <PopoverComponent
-      />
-      {drawing && (
-        <DrawComponent
-          geometryType={drawing}
-          incrementCounter={incrementCounter}
-        />
-      )}
+      <PopoverComponent />
+      {drawing && <DrawComponent geometryType={drawing} />}
     </Box>
   );
 };
+
 export default MapComponent;

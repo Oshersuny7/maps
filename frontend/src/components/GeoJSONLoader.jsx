@@ -1,25 +1,40 @@
 import React, { useEffect } from "react";
 import { addFeaturesToVectorLayer } from "../utils/MapUtils";
 import { GeoJSON } from "ol/format";
-const GeoJSONLoader = ({ vectorLayer, url }) => {
-  useEffect(() => {
-    if (!vectorLayer) return;
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("GeoJSON data:", data);
-        const features = new GeoJSON().readFeatures(data);
-        features.forEach((feature, index) => {
-          console.log(`Feature ${index}:`, feature.getProperties());
-        });
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import { useMap } from "../hooks/contexts/map/MapContext";
 
-        console.log("Features:", features);
-        addFeaturesToVectorLayer(vectorLayer, features);
-      })
-      .catch((error) => {
+const GeoJSONLoader = ({ url }) => {
+  const map = useMap();
+  useEffect(() => {
+    const loadGeoJSONData = async () => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const features = new GeoJSON().readFeatures(data);
+        const uniqueLayerNames = [...new Set(features.map(feature => feature.getProperties().name))];
+
+        uniqueLayerNames.forEach((layerName) => {
+          const filteredFeatures = features.filter((feature) => feature.getProperties().name === layerName);
+
+          if (filteredFeatures.length > 0) {
+            const newVectorLayer = new VectorLayer({
+              source: new VectorSource(),
+              name: layerName,
+            });
+
+            addFeaturesToVectorLayer(newVectorLayer, filteredFeatures);
+            map.addLayer(newVectorLayer);
+          }
+        });
+      } catch (error) {
         console.error("Error loading GeoJSON:", error);
-      });
-  }, [vectorLayer, url]);
+      }
+    };
+
+    loadGeoJSONData();
+  }, [map, url]);
 
   return <></>;
 };

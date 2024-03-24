@@ -81,4 +81,4 @@ export {
   createVectorLayer,
   getLayerByPropertyName,
   getArrayOfVectorLayersWithoutDrawing
-};
+  ,}

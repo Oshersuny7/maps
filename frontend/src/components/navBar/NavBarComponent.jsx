@@ -3,8 +3,10 @@ import { Box, Button, Grid, MenuItem, Select, Typography } from "@mui/material";
 import { geometryTypes } from "../../utils/GeomtryTypes";
 import SearchComponent from "./SearchComponent";
 import { useMap } from "../../hooks/contexts/map/MapContext";
+import { useCounterTotalFeatures } from "../../hooks/useCounterTotalFeatures";
 
-const NavBarComponent = ({ setDrawing, counterFeatures, handleDelateAll }) => {
+const NavBarComponent = ({ setDrawing, handleDelateAll }) => {
+  const {counterFeatures} = useCounterTotalFeatures();
   const map = useMap();
   return (
     <Grid

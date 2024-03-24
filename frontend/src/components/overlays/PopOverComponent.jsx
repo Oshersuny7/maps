@@ -3,7 +3,7 @@ import { Box, Typography, Popover } from "@mui/material";
 import { useMap } from "../../hooks/contexts/map/MapContext";
 import { useDrawingInProgress } from "../../hooks/useDrawingInProgress";
 
-const PopoverComponent = ({  drawing }) => {
+const PopoverComponent = ({drawing }) => {
   const map = useMap();
   const {drawingInProgress} = useDrawingInProgress();
   const [openModal, setOpenModal] = useState(false);
@@ -43,7 +43,7 @@ const PopoverComponent = ({  drawing }) => {
       </Typography>
       <Typography variant="body1" component="div" sx={{ mt: 2 }}>
         <Box>
-          Layer:{""}{selectedPlaceProperties && selectedPlaceProperties.name}
+          Layer:{" "}{selectedPlaceProperties && selectedPlaceProperties.name}
         </Box>
         <Box>
           Location:{" "}{selectedPlaceProperties && selectedPlaceProperties.location}
@@ -52,7 +52,7 @@ const PopoverComponent = ({  drawing }) => {
           Coordinates:{" "}{selectedPlaceProperties && selectedPlaceProperties.coordinates}
         </Box>
         <Box>
-          Degrees:{""}{selectedPlaceProperties && selectedPlaceProperties.degrees}
+          Degrees:{" "}{selectedPlaceProperties && selectedPlaceProperties.degrees}
         </Box>
       </Typography>
     </Box>

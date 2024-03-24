@@ -91,6 +91,71 @@
         "coordinates": [21.658849439393663, 8.343341174037661],
         "type": "Point"
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerC",
+        "location": "E Russia",
+        "coordinates": "37.317, 55.823",
+        "degrees": "4 C"
+      },
+      "geometry": {
+        "coordinates": [37.317330369618844, 55.8239345715283],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerC",
+        "location": "W Russia",
+        "coordinates": "135.120, 56.871",
+        "degrees": "4 C"
+      },
+      "geometry": {
+        "coordinates": [135.12072515009163, 56.871601068241944],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerC",
+        "location": "Karachi",
+        "coordinates": "66.960,  24.687",
+        "degrees": "4 C"
+      },
+      "geometry": {
+        "coordinates": [66.96052934869161, 24.68784807969155],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerC",
+        "location": "S China",
+        "coordinates": "106.902, 24.908",
+        "degrees": "4 C"
+      },
+      "geometry": {
+        "coordinates": [106.90211363079072, 24.908798471507012],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LayerC",
+        "location": "N China",
+        "coordinates": "85.742,  40.566",
+        "degrees": "4 C"
+      },
+      "geometry": {
+        "coordinates": [85.74286620140401, 40.56615258608551],
+        "type": "Point"
+      }
     }
   ]
 }
