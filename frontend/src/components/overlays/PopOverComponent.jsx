@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Typography, Popover } from "@mui/material";
+import { Box, Typography, Popover, Button } from "@mui/material";
 import { useMap } from "../../hooks/contexts/map/MapContext";
 import { useDrawingInProgress } from "../../hooks/useDrawingInProgress";
 
-const PopoverComponent = ({drawing }) => {
+const PopoverComponent = ({ drawing }) => {
   const map = useMap();
-  const {drawingInProgress} = useDrawingInProgress();
+  const { drawingInProgress } = useDrawingInProgress();
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlaceProperties, setSelectedPlaceProperties] = useState(null);
   const anchorElRef = useRef(null);
@@ -13,8 +13,11 @@ const PopoverComponent = ({drawing }) => {
   useEffect(() => {
     if (!map) return;
     const handlePopOver = (event) => {
-      if (!drawingInProgress && !drawing ) {
-        const feature = map.forEachFeatureAtPixel( event.pixel,(feature) => feature);
+      if (!drawingInProgress && !drawing) {
+        const feature = map.forEachFeatureAtPixel(
+          event.pixel,
+          (feature) => feature
+        );
         if (feature) {
           const properties = feature.getProperties();
           anchorElRef.current.style.left = event.pixel[0] + "px";
@@ -29,29 +32,42 @@ const PopoverComponent = ({drawing }) => {
     return () => {
       map.un("click", handlePopOver);
     };
-  }, [map, drawingInProgress,drawing]);
+  }, [map, drawingInProgress, drawing]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
     anchorElRef.current.style.display = "none";
   };
-
   const locationProperties = (
-    <Box>
-      <Typography sx={{display:"flex",justifyContent:"center"}} variant="h6" component="h2">
-        Location Properties
-      </Typography>
-      <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-        <Box>
-          Layer:{" "}{selectedPlaceProperties && selectedPlaceProperties.name}
+    <Box sx={{ bgcolor: "gray" }}>
+      <Box>
+        <Typography
+          sx={{ display: "flex", justifyContent: "center", color: "white" }}
+          variant="h6"
+          component="h2"
+        >
+          Location Properties
+        </Typography>
+        <Button variant="contained" color="secondary" sx={{ width: "100%" }}>
+          Show relatives
+        </Button>
+      </Box>
+      <Typography variant="body1" component="div" sx={{ mt: 1 }}>
+        <Box sx={{ color: "white" }}>
+          Id:{" "} {selectedPlaceProperties && selectedPlaceProperties.id}
         </Box>
-        <Box>
-          Location:{" "}{selectedPlaceProperties && selectedPlaceProperties.location}
+        <Box sx={{ color: "white" }}>
+          Layer:{" "} {selectedPlaceProperties && selectedPlaceProperties.name}
         </Box>
-        <Box>
-          Coordinates:{" "}{selectedPlaceProperties && selectedPlaceProperties.coordinates}
+        <Box sx={{ color: "white" }}>
+          Location:{" "}
+          {selectedPlaceProperties && selectedPlaceProperties.location}
         </Box>
-        <Box>
+        <Box sx={{ color: "white" }}>
+          Coordinates:{" "}
+          {selectedPlaceProperties && selectedPlaceProperties.coordinates}
+        </Box>
+        <Box sx={{ color: "white" }}>
           Degrees:{" "}{selectedPlaceProperties && selectedPlaceProperties.degrees}
         </Box>
       </Typography>
@@ -79,5 +95,4 @@ const PopoverComponent = ({drawing }) => {
     </Box>
   );
 };
-
 export default PopoverComponent;

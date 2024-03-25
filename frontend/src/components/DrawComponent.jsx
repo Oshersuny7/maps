@@ -80,6 +80,7 @@ const DrawComponent = ({ geometryType }) => {
     const mapElement = mapRef.current.getTargetElement();
     mapElement.style.cursor = cursorType;
   };
+  
     return (
       <>
         {polygonDrawn && geometryType === "Polygon" && (

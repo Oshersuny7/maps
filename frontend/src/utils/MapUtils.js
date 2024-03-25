@@ -39,13 +39,25 @@ const clearVectorLayer = (vectorLayer) => {
   }
 };
 
-const addFeaturesToVectorLayer = (vectorLayer, features) => {
-  if (vectorLayer && features) {
-    const source = vectorLayer.getSource();
-    if (source) {
-      source.addFeatures(features);
-    }
+const addFeaturesToVectorLayer = (map, layerName, features) => {
+  const foundLayer = getLayerByName(map, layerName);
+  
+  if (foundLayer) {
+    const featuresToAdd = features.filter(feature => {
+      return !foundLayer.getSource().getFeatures().find(feat => feat.getId() === feature.getId())
+    })
+    foundLayer.getSource().addFeatures(featuresToAdd);
   }
+    else {
+      const newVectorLayer = new VectorLayer({
+        source: new VectorSource({
+          features: features
+        }),
+        name: layerName,
+      });
+
+      map.addLayer(newVectorLayer)
+    }
 };
 
 const getLayerByPropertyName = (map, propertyName) => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { addFeaturesToVectorLayer } from "../utils/MapUtils";
+import { addFeaturesToVectorLayer, getLayerByName } from "../utils/MapUtils";
 import { GeoJSON } from "ol/format";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -19,13 +19,7 @@ const GeoJSONLoader = ({ url }) => {
           const filteredFeatures = features.filter((feature) => feature.getProperties().name === layerName);
 
           if (filteredFeatures.length > 0) {
-            const newVectorLayer = new VectorLayer({
-              source: new VectorSource(),
-              name: layerName,
-            });
-
-            addFeaturesToVectorLayer(newVectorLayer, filteredFeatures);
-            map.addLayer(newVectorLayer);
+            addFeaturesToVectorLayer(map, layerName, filteredFeatures);
           }
         });
       } catch (error) {

@@ -34,10 +34,7 @@ const MapComponent = () => {
   }, [drawing]);
 
   const handleDelateAll = () => {
-    const layerToRemove = getLayerByName(
-      mapRef.current,
-      LayersName.layers.Draw
-    );
+    const layerToRemove = getLayerByName(mapRef.current, LayersName.layers.Draw);
     if (layerToRemove) {
       clearVectorLayer(layerToRemove);
       resetCounter();
