@@ -9,7 +9,7 @@ import { useMap } from "../hooks/contexts/map/MapContext";
 import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 import { useCounterTotalFeatures } from "../hooks/useCounterTotalFeatures";
 
-const DrawComponent = ({ geometryType }) => {
+const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
   const { setDrawingInProgress } = useDrawingInProgress();
   const {incrementCounter} = useCounterTotalFeatures();
   const mapRef = useRef(useMap());
@@ -53,7 +53,6 @@ const DrawComponent = ({ geometryType }) => {
       setDrawing(true);
       changeCursor();
     });
-
     const drawEndKey = drawInteractionRef.current.on("drawend", (event) => {
       const layersWithoutDrawing = getArrayOfVectorLayersWithoutDrawing(
         mapRef.current
@@ -65,6 +64,7 @@ const DrawComponent = ({ geometryType }) => {
       setDrawing(false);
       if (geometryType === "Polygon") {
         setPolygonDrawn(true);
+        setShowAlert(true);
       }
       changeCursor();
       incrementCounter();
@@ -80,24 +80,21 @@ const DrawComponent = ({ geometryType }) => {
     const mapElement = mapRef.current.getTargetElement();
     mapElement.style.cursor = cursorType;
   };
-  
-    return (
-      <>
-        {polygonDrawn && geometryType === "Polygon" && (
-          <Alert severity="info">
-            <Box>
-              {vectorLayerWithoutDrawing.map((layer, index) => (
-                <Typography sx={{ ml: "5px" }} key={`${layer.getProperties().name}-${index}`}>
-                  {layer.getProperties().name}:{" "}
-                  {counterArray ? counterArray[index] : 0} features
-                </Typography>
-              ))}
-            </Box>
-          </Alert>
-        )}
-      </>
-    );
-    
+  return (
+    <>
+      {showAlert && geometryType === "Polygon" && (
+        <Alert severity="info">
+          <Box>
+            {vectorLayerWithoutDrawing.map((layer, index) => (
+              <Typography sx={{ ml: "5px" }} key={`${layer.getProperties().name}-${index}`}>
+                {layer.getProperties().name}:{" "}
+                {counterArray ? counterArray[index] : 0} features
+              </Typography>
+            ))}
+          </Box>
+        </Alert>
+      )}
+    </>
+  );
 };
-
 export default DrawComponent;

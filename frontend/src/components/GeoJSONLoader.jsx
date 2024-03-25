@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import { addFeaturesToVectorLayer, getLayerByName } from "../utils/MapUtils";
+import { addFeaturesToVectorLayer} from "../utils/MapUtils";
 import { GeoJSON } from "ol/format";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 import { useMap } from "../hooks/contexts/map/MapContext";
 
 const GeoJSONLoader = ({ url }) => {

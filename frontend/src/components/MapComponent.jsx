@@ -16,6 +16,7 @@ import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 const MapComponent = () => {
   const mapRef = useRef(useMap());
   const [drawing, setDrawing] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const containerRef = useRef(null);
   const { setDrawingInProgress } = useDrawingInProgress();
   const { resetCounter } = useCounterTotalFeatures();
@@ -38,6 +39,7 @@ const MapComponent = () => {
     if (layerToRemove) {
       clearVectorLayer(layerToRemove);
       resetCounter();
+      setShowAlert(false);
     }
   };
 
@@ -60,9 +62,8 @@ const MapComponent = () => {
         <GeoJSONLoader url={Features_JSON_PATH} />
       </Box>
       <PopoverComponent />
-      {drawing && <DrawComponent geometryType={drawing} />}
+      {drawing && <DrawComponent geometryType={drawing} showAlert={showAlert} setShowAlert={setShowAlert} />}
     </Box>
   );
 };
-
 export default MapComponent;
