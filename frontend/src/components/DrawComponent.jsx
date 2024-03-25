@@ -16,7 +16,6 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
   const drawLayerRef = useRef(null);
   const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
-  const [polygonDrawn, setPolygonDrawn] = useState(false);
   const [counterArray, setCounterArray] = useState(null);
   const [vectorLayerWithoutDrawing, setVectorLayerWithoutDrawing] = useState([]);
 
@@ -63,7 +62,6 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
       setCounterArray(counter);
       setDrawing(false);
       if (geometryType === "Polygon") {
-        setPolygonDrawn(true);
         setShowAlert(true);
       }
       changeCursor();

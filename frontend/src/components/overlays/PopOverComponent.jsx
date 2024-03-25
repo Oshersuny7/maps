@@ -38,6 +38,7 @@ const PopoverComponent = ({ drawing }) => {
     setOpenModal(false);
     anchorElRef.current.style.display = "none";
   };
+
   const locationProperties = (
     <Box sx={{ bgcolor: "gray" }}>
       <Box>
@@ -54,7 +55,7 @@ const PopoverComponent = ({ drawing }) => {
       </Box>
       <Typography variant="body1" component="div" sx={{ mt: 1 }}>
         <Box sx={{ color: "white" }}>
-          Id:{" "} {selectedPlaceProperties && selectedPlaceProperties.id}
+          Type:{" "} {selectedPlaceProperties && selectedPlaceProperties.type}
         </Box>
         <Box sx={{ color: "white" }}>
           Layer:{" "} {selectedPlaceProperties && selectedPlaceProperties.name}

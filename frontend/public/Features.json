@@ -2,9 +2,10 @@
   "type": "FeatureCollection",
   "features": [
     {
+      "id":1,
       "type": "Feature",
       "properties": {
-        "id":333,
+        "type":"site",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "20.619, 8.346",
@@ -16,9 +17,10 @@
       }
     },
     {
+      "id":2,
       "type": "Feature",
       "properties": {
-        "id":333,
+        "type":"site",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "21.381, 8.432",
@@ -30,9 +32,10 @@
       }
     },
     {
+      "id":3,
       "type": "Feature",
       "properties": {
-        "id":333,
+        "type":"site",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "21.095, 8.151",
@@ -44,9 +47,10 @@
       }
     },
     {
+      "id":4,
       "type": "Feature",
       "properties": {
-        "id":333,
+        "type":"site",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "20.956, 8.616",
@@ -58,9 +62,10 @@
       }
     },
     {
+      "id":5,
       "type": "Feature",
       "properties": {
-        "id":555,
+        "type":"site",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.702, 8.442",
@@ -72,9 +77,10 @@
       }
     },
     {
+      "id":6,
       "type": "Feature",
       "properties": {
-        "id":555,
+        "type":"site",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.471, 8.133",
@@ -86,9 +92,10 @@
       }
     },
     {
+      "id":7,
       "type": "Feature",
       "properties": {
-        "id":555,
+        "type":"site",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.658, 8.343",
@@ -100,13 +107,15 @@
       }
     },
     {
+      "id":8,
       "type": "Feature",
       "properties": {
-        "id":777,
-        "name": "LayerC",
+        "type":"device",
+        "name": "DeviceLayer",
         "location": "E Russia",
         "coordinates": "37.317, 55.823",
-        "degrees": "4 C"
+        "degrees": "4 C",
+        "siteId":12
       },
       "geometry": {
         "coordinates": [37.317330369618844, 55.8239345715283],
@@ -114,10 +123,11 @@
       }
     },
     {
+      "id":9,
       "type": "Feature",
       "properties": {
-        "id":777,
-        "name": "LayerC",
+        "type":"device",
+        "name": "DeviceLayer",
         "location": "W Russia",
         "coordinates": "135.120, 56.871",
         "degrees": "4 C"
@@ -128,10 +138,11 @@
       }
     },
     {
+      "id":10,
       "type": "Feature",
       "properties": {
-        "id":777,
-        "name": "LayerC",
+        "type":"device",
+        "name": "DeviceLayer",
         "location": "Karachi",
         "coordinates": "66.960,  24.687",
         "degrees": "4 C"
@@ -142,10 +153,11 @@
       }
     },
     {
+      "id":11,
       "type": "Feature",
       "properties": {
-        "id":777,
-        "name": "LayerC",
+        "type":"device",
+        "name": "DeviceLayer",
         "location": "S China",
         "coordinates": "106.902, 24.908",
         "degrees": "4 C"
@@ -156,10 +168,11 @@
       }
     },
     {
+      "id":12,
       "type": "Feature",
       "properties": {
-        "id":777,
-        "name": "LayerC",
+        "type":"site",
+        "name": "SiteLayer",
         "location": "N China",
         "coordinates": "85.742,  40.566",
         "degrees": "4 C"
