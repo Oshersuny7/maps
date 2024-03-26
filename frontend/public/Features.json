@@ -112,7 +112,7 @@
       "properties": {
         "type":"device",
         "name": "DeviceLayer",
-        "location": "E Russia",
+        "location": "East Russia",
         "coordinates": "37.317, 55.823",
         "degrees": "4 C",
         "siteId":12
@@ -128,9 +128,10 @@
       "properties": {
         "type":"device",
         "name": "DeviceLayer",
-        "location": "W Russia",
+        "location": "West Russia",
         "coordinates": "135.120, 56.871",
-        "degrees": "4 C"
+        "degrees": "4 C",
+        "siteId":12
       },
       "geometry": {
         "coordinates": [135.12072515009163, 56.871601068241944],
@@ -145,7 +146,8 @@
         "name": "DeviceLayer",
         "location": "Karachi",
         "coordinates": "66.960,  24.687",
-        "degrees": "4 C"
+        "degrees": "4 C",
+        "siteId":12
       },
       "geometry": {
         "coordinates": [66.96052934869161, 24.68784807969155],
@@ -158,9 +160,10 @@
       "properties": {
         "type":"device",
         "name": "DeviceLayer",
-        "location": "S China",
+        "location": "South China",
         "coordinates": "106.902, 24.908",
-        "degrees": "4 C"
+        "degrees": "4 C",
+        "siteId":12
       },
       "geometry": {
         "coordinates": [106.90211363079072, 24.908798471507012],

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draw from "ol/interaction/Draw.js";
 import { unByKey } from "ol/Observable.js";
-import {createVectorLayer,getArrayOfVectorLayersWithoutDrawing,} from "../utils/MapUtils";
+import {createVectorLayer,getArrayOfVectorLayersWithoutDrawLayer} from "../utils/MapUtils";
 import LayersName from "../utils/LayersName";
 import { Alert, Box, Typography } from "@mui/material";
 import useFeaturesAmount from "../hooks/useFeaturesAmount";
@@ -53,7 +53,7 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
       changeCursor();
     });
     const drawEndKey = drawInteractionRef.current.on("drawend", (event) => {
-      const layersWithoutDrawing = getArrayOfVectorLayersWithoutDrawing(
+      const layersWithoutDrawing = getArrayOfVectorLayersWithoutDrawLayer(
         mapRef.current
       );
       setVectorLayerWithoutDrawing(layersWithoutDrawing);
