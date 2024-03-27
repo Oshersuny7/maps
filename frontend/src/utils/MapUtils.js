@@ -78,11 +78,16 @@ export const getArrayOfVectorLayersWithoutDrawLayer = (map) => {
 };
 
 export const drawLineBetweenSiteAndDevice = (map, lineString) => {
-  const lineLayer = createVectorLayer(LayersName.layers.LineStringLayer);
+  let lineLayer = getLayerByName(map, LayersName.layers.LineStringLayer);
+  if (!lineLayer) {
+    lineLayer = createVectorLayer(LayersName.layers.LineStringLayer);
+    map.addLayer(lineLayer);
+  }
   lineLayer.getSource().addFeature(new Feature(lineString));
-    map.addLayer(lineLayer); 
-  console.log("line created");
+  const featuresInLayer = lineLayer.getSource().getFeatures();
+  console.log("Features in LineStringLayer:", featuresInLayer);
 };
+
 
 export const getFeatureBySiteId = (map, layerName, featureType, featureSiteId) => {
   const layer = getLayerByName(map, layerName);
