@@ -12,7 +12,7 @@ import { useCounterTotalFeatures } from "../hooks/useCounterTotalFeatures";
 const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
   const { setDrawingInProgress } = useDrawingInProgress();
   const {incrementCounter} = useCounterTotalFeatures();
-  const mapRef = useRef(useMap());
+  const map = useMap();
   const drawLayerRef = useRef(null);
   const drawInteractionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -20,11 +20,11 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
   const [vectorLayerWithoutDrawing, setVectorLayerWithoutDrawing] = useState([]);
 
   useEffect(() => {
-    if (!mapRef.current || !geometryType) return;
+    if (!map || !geometryType) return;
 
     if (geometryType === "None") {
       if (drawInteractionRef.current) {
-        mapRef.current.removeInteraction(drawInteractionRef.current);
+        map.removeInteraction(drawInteractionRef.current);
         drawInteractionRef.current = null;
         setDrawingInProgress(false);
       }
@@ -34,11 +34,11 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
 
     if (!drawLayerRef.current) {
       drawLayerRef.current = createVectorLayer(LayersName.layers.Draw);
-      mapRef.current.addLayer(drawLayerRef.current);
+      map.addLayer(drawLayerRef.current);
     }
 
     if (drawInteractionRef.current) {
-      mapRef.current.removeInteraction(drawInteractionRef.current);
+      map.removeInteraction(drawInteractionRef.current);
     }
 
     drawInteractionRef.current = new Draw({
@@ -46,7 +46,7 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
       type: geometryType,
     });
 
-    mapRef.current.addInteraction(drawInteractionRef.current);
+    map.addInteraction(drawInteractionRef.current);
 
     const drawStartKey = drawInteractionRef.current.on("drawstart", () => {
       setDrawing(true);
@@ -54,7 +54,7 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
     });
     const drawEndKey = drawInteractionRef.current.on("drawend", (event) => {
       const layersWithoutDrawing = getArrayOfVectorLayersWithoutDrawLayer(
-        mapRef.current
+        map
       );
       setVectorLayerWithoutDrawing(layersWithoutDrawing);
       const geometry = event.feature.getGeometry();
@@ -72,10 +72,10 @@ const DrawComponent = ({ geometryType ,showAlert, setShowAlert }) => {
       unByKey(drawStartKey);
       unByKey(drawEndKey);
     };
-  }, [mapRef.current, geometryType, incrementCounter]);
+  }, [map, geometryType, incrementCounter]);
 
   const changeCursor = (cursorType = "crosshair") => {
-    const mapElement = mapRef.current.getTargetElement();
+    const mapElement = map.getTargetElement();
     mapElement.style.cursor = cursorType;
   };
   return (
