@@ -5,7 +5,7 @@
       "id":1,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "20.619, 8.346",
@@ -20,7 +20,7 @@
       "id":2,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "21.381, 8.432",
@@ -35,7 +35,7 @@
       "id":3,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "21.095, 8.151",
@@ -50,7 +50,7 @@
       "id":4,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerA",
         "location": "Sudan",
         "coordinates": "20.956, 8.616",
@@ -65,7 +65,7 @@
       "id":5,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.702, 8.442",
@@ -80,7 +80,7 @@
       "id":6,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.471, 8.133",
@@ -95,7 +95,7 @@
       "id":7,
       "type": "Feature",
       "properties": {
-        "type":"site",
+        "type":"device",
         "name": "LayerB",
         "location": "Sudan",
         "coordinates": "21.658, 8.343",
