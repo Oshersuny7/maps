@@ -14,7 +14,7 @@ import { useMap } from "../hooks/contexts/map/MapContext";
 import { useDrawingInProgress } from "../hooks/useDrawingInProgress";
 
 const MapComponent = () => {
-  const mapRef = useRef(useMap());
+  const map = useMap();
   const [drawing, setDrawing] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const containerRef = useRef(null);
@@ -23,8 +23,8 @@ const MapComponent = () => {
 
   useEffect(() => {
     useGeographic();
-    if (mapRef.current && containerRef.current) {
-      mapRef.current.setTarget(containerRef.current);
+    if (map && containerRef.current) {
+      map.setTarget(containerRef.current);
     }
   }, []);
 
@@ -35,15 +35,17 @@ const MapComponent = () => {
   }, [drawing]);
 
   const handleDelateAll = () => {
-    const layerToRemove = getLayerByName(mapRef.current, LayersName.layers.Draw);
-    if (layerToRemove) {
-      clearVectorLayer(layerToRemove);
+    const drawlayerToRemove = getLayerByName(map, LayersName.layers.Draw);
+    const removeLines = getLayerByName(map, LayersName.layers.LineStringLayer)
+    if (drawlayerToRemove || removeLines) {
+      clearVectorLayer(drawlayerToRemove);
+      clearVectorLayer(removeLines);
       resetCounter();
       setShowAlert(false);
     }
   };
 
-  if (!mapRef.current) return <></>;
+  if (!map) return <></>;
 
   return (
     <Box sx={{ height: "90vh", display: "flex", flexDirection: "column" }}>
