@@ -1,0 +1,1 @@
+export const nicoleFeatures =["NicoleState","NicoleCountry","NicoleCity","None"];

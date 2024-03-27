@@ -4,7 +4,8 @@ const layers = {
   LayerB: "LayerB",
   SiteLayer:"SiteLayer",
   DeviceLayer:"DeviceLayer",
-  LineStringLayer:"LineStringLayer"
+  LineStringLayer:"LineStringLayer",
+  NicolLayer:"NicolLayer"
 };
 
 export default { layers };

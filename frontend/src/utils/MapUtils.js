@@ -6,7 +6,6 @@ import { OSM } from "ol/source";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import LayersName from "./LayersName";
-import { LineString } from "ol/geom";
 import Feature from "ol/Feature";
 import FeatureTypes from "./FeatureTypes";
 
@@ -44,7 +43,6 @@ export const clearVectorLayer = (vectorLayer) => {
 
 export const addFeaturesToVectorLayer = (map, layerName, features) => {
   const foundLayer = getLayerByName(map, layerName);
-  
   if (foundLayer) {
     const featuresToAdd = features.filter(feature => {
       return !foundLayer.getSource().getFeatures().find(feat => feat.getId() === feature.getId())
@@ -58,7 +56,6 @@ export const addFeaturesToVectorLayer = (map, layerName, features) => {
         }),
         name: layerName,
       });
-
       map.addLayer(newVectorLayer)
     }
 };
@@ -83,7 +80,7 @@ export const getArrayOfVectorLayersWithoutDrawLayer = (map) => {
 export const drawLineBetweenSiteAndDevice = (map, lineString) => {
   const lineLayer = createVectorLayer(LayersName.layers.LineStringLayer);
   lineLayer.getSource().addFeature(new Feature(lineString));
-  map.addLayer(lineLayer); 
+    map.addLayer(lineLayer); 
   console.log("line created");
 };
 
