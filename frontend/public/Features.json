@@ -110,6 +110,7 @@
       "id":8,
       "type": "Feature",
       "properties": {
+        "find":"site",
         "type":"device",
         "name": "DeviceLayer",
         "location": "East Russia",
@@ -126,6 +127,7 @@
       "id":9,
       "type": "Feature",
       "properties": {
+        "find":"site",
         "type":"device",
         "name": "DeviceLayer",
         "location": "West Russia",
@@ -142,6 +144,7 @@
       "id":10,
       "type": "Feature",
       "properties": {
+        "find":"site",
         "type":"device",
         "name": "DeviceLayer",
         "location": "Karachi",
@@ -158,6 +161,7 @@
       "id":11,
       "type": "Feature",
       "properties": {
+        "find":"site",
         "type":"device",
         "name": "DeviceLayer",
         "location": "South China",
@@ -174,9 +178,10 @@
       "id":12,
       "type": "Feature",
       "properties": {
+        "find":"devices",
         "type":"site",
         "name": "SiteLayer",
-        "location": "N China",
+        "location": "North China",
         "coordinates": "85.742,  40.566",
         "degrees": "4 C"
       },

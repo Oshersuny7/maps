@@ -6,6 +6,9 @@ import { OSM } from "ol/source";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import LayersName from "./LayersName";
+import { LineString } from "ol/geom";
+import Feature from "ol/Feature";
+import FeatureTypes from "./FeatureTypes";
 
 const DEFAULT_ZOOM_LEVEL = 2;
 const ISRAEL_CENTER_COORDINATE = fromLonLat([31, 35]);
@@ -15,7 +18,7 @@ const defaultMapParams = {
   center: ISRAEL_CENTER_COORDINATE,
 };
 
-const createMap = () => {
+export const createMap = () => {
   return new Map({
     layers: [
       new TileLayer({
@@ -26,20 +29,20 @@ const createMap = () => {
   });
 };
 
-const getLayerByName = (map, layerName) => {
+export const getLayerByName = (map, layerName) => {
   return map
     .getLayers()
     .getArray()
     .find((layer) => layer.get("name") === layerName);
 };
 
-const clearVectorLayer = (vectorLayer) => {
+export const clearVectorLayer = (vectorLayer) => {
   if (vectorLayer) {
     vectorLayer.getSource().clear();
   }
 };
 
-const addFeaturesToVectorLayer = (map, layerName, features) => {
+export const addFeaturesToVectorLayer = (map, layerName, features) => {
   const foundLayer = getLayerByName(map, layerName);
   
   if (foundLayer) {
@@ -60,22 +63,14 @@ const addFeaturesToVectorLayer = (map, layerName, features) => {
     }
 };
 
-const getLayerByPropertyName = (map, propertyName) => {
-  console.log(map);
-  return map
-    .getLayers()
-    .getArray()
-    .find((layer) => layer.get(propertyName) === propertyName);
-};
-
-const createVectorLayer = (layerName) => {
+export const createVectorLayer = (layerName) => {
   return new VectorLayer({
     name: layerName,
     source: new VectorSource(),
   });
 };
 
-const getArrayOfVectorLayersWithoutDrawing = (map) => {
+export const getArrayOfVectorLayersWithoutDrawLayer = (map) => {
   return map
     .getAllLayers()
     .filter(
@@ -85,12 +80,24 @@ const getArrayOfVectorLayersWithoutDrawing = (map) => {
     );
 };
 
-export {
-  createMap,
-  getLayerByName,
-  clearVectorLayer,
-  addFeaturesToVectorLayer,
-  createVectorLayer,
-  getLayerByPropertyName,
-  getArrayOfVectorLayersWithoutDrawing
-  ,}
+export const drawLineBetweenSiteAndDevice = (map, lineString) => {
+  const lineLayer = createVectorLayer(LayersName.layers.LineStringLayer);
+  lineLayer.getSource().addFeature(new Feature(lineString));
+  map.addLayer(lineLayer); 
+  console.log("line created");
+};
+
+export const getFeatureBySiteId = (map, layerName, featureType, featureSiteId) => {
+  const layer = getLayerByName(map, layerName);
+  const features = layer ? layer.getSource().getFeatures() : [];
+
+  const feature = features.find((feature) => {
+    if (featureType === FeatureTypes.types.Site) {
+      return feature.getId() === featureSiteId;
+    } else if (featureType === FeatureTypes.types.Device) {
+      return feature.getProperties().siteId === featureSiteId;
+    }
+    return false;
+  });
+  return feature;
+};

@@ -1,5 +1,5 @@
 const types = {
-    Site:"Site",
+    Site:"site",
     Device:"device"
 };
 export default {types};
