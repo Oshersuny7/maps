@@ -30,5 +30,4 @@ const GeoJSONLoader = ({ url }) => {
 
   return <></>;
 };
-
 export default GeoJSONLoader;

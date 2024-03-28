@@ -8,6 +8,7 @@ import { LineString } from 'ol/geom';
 
 const FeatureProperties = ({selectedPlaceProperties}) => {
     const map = useMap();
+
     const handleDrawLine = () => {
         if (selectedPlaceProperties) {
             if (selectedPlaceProperties.type === FeatureTypes.types.Site) {
@@ -42,45 +43,49 @@ const FeatureProperties = ({selectedPlaceProperties}) => {
         }
     };
     
-    return (
-      <Box sx={{ bgcolor: "gray" }}>
-        <Box>
-          <Typography
-            sx={{ display: "flex", justifyContent: "center", color: "white" }}
-            variant="h6"
-            component="h2"
-          >
-            Location Properties
-          </Typography>
-          <Button
-            variant="contained"
-            color="warning"
-            sx={{ width: "100%" }}
-            onClick={handleDrawLine}
-          >
-            find {selectedPlaceProperties && selectedPlaceProperties.find}
-          </Button>
-        </Box>
-        <Typography variant="body1" component="div" sx={{ mt: 1 }}>
-          <Box sx={{ color: "white" }}>
-            Type: {selectedPlaceProperties && selectedPlaceProperties.type}
-          </Box>
-          <Box sx={{ color: "white" }}>
-            Layer: {selectedPlaceProperties && selectedPlaceProperties.name}
-          </Box>
-          <Box sx={{ color: "white" }}>
-            Location:{" "}
-            {selectedPlaceProperties && selectedPlaceProperties.location}
-          </Box>
-          <Box sx={{ color: "white" }}>
-            Coordinates:{" "}
-            {selectedPlaceProperties && selectedPlaceProperties.coordinates}
-          </Box>
-          <Box sx={{ color: "white" }}>
-            Degrees: {selectedPlaceProperties && selectedPlaceProperties.degrees}
-          </Box>
-        </Typography>
+    const PropertiesInfo=(<Box sx={{ bgcolor: "gray" }}>
+    <Box>
+      <Typography
+        sx={{ display: "flex", justifyContent: "center", color: "white" }}
+        variant="h6"
+        component="h2"
+      >
+        Location Properties
+      </Typography>
+      <Button
+        variant="contained"
+        color="warning"
+        sx={{ width: "100%" }}
+        onClick={handleDrawLine}
+      >
+        find {selectedPlaceProperties && selectedPlaceProperties.find}
+      </Button>
+    </Box>
+    <Typography variant="body1" component="div" sx={{ mt: 1 }}>
+      <Box sx={{ color: "white" }}>
+        Type: {selectedPlaceProperties && selectedPlaceProperties.type}
       </Box>
-    ); 
+      <Box sx={{ color: "white" }}>
+        Layer: {selectedPlaceProperties && selectedPlaceProperties.name}
+      </Box>
+      <Box sx={{ color: "white" }}>
+        Location:{" "}
+        {selectedPlaceProperties && selectedPlaceProperties.location}
+      </Box>
+      <Box sx={{ color: "white" }}>
+        Coordinates:{" "}
+        {selectedPlaceProperties && selectedPlaceProperties.coordinates}
+      </Box>
+      <Box sx={{ color: "white" }}>
+        Degrees: {selectedPlaceProperties && selectedPlaceProperties.degrees}
+      </Box>
+    </Typography>
+  </Box>)
+    
+    return (
+      <>
+      {PropertiesInfo}
+      </>
+      ); 
 }
 export default FeatureProperties;

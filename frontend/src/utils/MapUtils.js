@@ -88,7 +88,6 @@ export const drawLineBetweenSiteAndDevice = (map, lineString) => {
   console.log("Features in LineStringLayer:", featuresInLayer);
 };
 
-
 export const getFeatureBySiteId = (map, layerName, featureType, featureSiteId) => {
   const layer = getLayerByName(map, layerName);
   const features = layer ? layer.getSource().getFeatures() : [];

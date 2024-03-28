@@ -3,7 +3,7 @@ import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import { Box } from "@mui/material";
 import DrawComponent from "./DrawComponent";
-import { FEATURES_JSON_PATH, NICOLE_FEATURES_JSON_PATH } from "../utils/FilePaths";
+import { FEATURES_JSON_PATH } from "../utils/FilePaths";
 import { clearVectorLayer, getLayerByName } from "../utils/MapUtils";
 import GeoJSONLoader from "./GeoJSONLoader";
 import NavBarComponent from "./navBar/NavBarComponent";

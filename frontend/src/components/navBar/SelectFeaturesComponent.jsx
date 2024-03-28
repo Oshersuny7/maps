@@ -23,7 +23,7 @@ const SelectFeaturesComponent = () => {
   
     const addFeatureToMap = (coordinate) => {
       createVectorLayer(LayersName.layers.NicolLayer);
-      addFeaturesToVectorLayer(map, LayersName.layers.NicolLayer, selectedFeature, coordinate);
+      addFeaturesToVectorLayer(map, LayersName.layers.NicolLayer, selectedFeature);
       map.addLayer(LayersName.layers.NicolLayer);
       setSelectedFeature(null);
     };

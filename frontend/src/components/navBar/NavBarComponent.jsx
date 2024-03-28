@@ -7,12 +7,7 @@ import SelectFeaturesComponent from "./SelectFeaturesComponent";
 
 const NavBarComponent = ({ setDrawing, handleDelateAll }) => {
   return (
-    <Grid
-      container
-      spacing={2}
-      justifyContent="space-around"
-      alignItems="center"
-    >
+    <Grid container justifyContent="space-around" alignItems="center">
       <SelectFeaturesComponent />
       <SelectFeaturesTypeComponent setDrawing={setDrawing} />
       <CounterFeaturesComponent />
@@ -20,5 +15,4 @@ const NavBarComponent = ({ setDrawing, handleDelateAll }) => {
     </Grid>
   );
 };
-
 export default NavBarComponent;
